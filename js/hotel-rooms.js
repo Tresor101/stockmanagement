@@ -47,7 +47,136 @@ let authField = '';
 // Load rooms table on page load
 document.addEventListener('DOMContentLoaded', function() {
     loadRoomsTable();
+    loadDashboardStats();
+    loadCurrentGuestsTable();
 });
+
+// Load dashboard statistics
+function loadDashboardStats() {
+    // Total rooms (6 rooms based on available + sample data)
+    const totalRooms = 6;
+    
+    // Get occupied rooms from localStorage or use sample data
+    const bookings = JSON.parse(localStorage.getItem('roomBookings')) || roomBookings;
+    const occupiedRooms = bookings.length;
+    const availableRooms = totalRooms - occupiedRooms;
+    
+    // Update stats cards
+    document.getElementById('totalRooms').textContent = totalRooms;
+    document.getElementById('occupiedRooms').textContent = occupiedRooms;
+    document.getElementById('availableRooms').textContent = availableRooms;
+}
+
+// Load current guests table
+function loadCurrentGuestsTable() {
+    const tbody = document.getElementById('currentGuestsTable');
+    if (!tbody) return;
+    
+    // Get bookings from localStorage or use sample data
+    const bookings = JSON.parse(localStorage.getItem('roomBookings')) || roomBookings;
+    
+    tbody.innerHTML = '';
+    
+    if (bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No current guests</td></tr>';
+        return;
+    }
+    
+    bookings.forEach(booking => {
+        const checkInDate = new Date(booking.checkIn);
+        const currentDate = new Date();
+        const timeSpent = Math.floor((currentDate - checkInDate) / (1000 * 60 * 60 * 24));
+        const daysText = timeSpent === 1 ? 'day' : 'days';
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${booking.guestName}</td>
+            <td>${booking.roomNumber}</td>
+            <td>${booking.roomType}</td>
+            <td>${timeSpent} ${daysText}</td>
+            <td>${formatDate(booking.checkIn)}</td>
+            <td>${formatDate(booking.checkOut)}</td>
+            <td>
+                <button class="btn btn-sm btn-warning" onclick="addExtraFeesToGuest('${booking.roomNumber}')" title="Add Extra Fees">
+                    <i class="fas fa-plus-circle"></i> Fees
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Add extra fees to existing guest (requires admin authentication)
+function addExtraFeesToGuest(roomNumber) {
+    const booking = roomBookings.find(b => b.roomNumber === roomNumber);
+    if (!booking) {
+        alert('Booking not found.');
+        return;
+    }
+    
+    // Store room number for later use
+    window.currentRoomForFees = roomNumber;
+    
+    // Prompt for fee type
+    const feeType = prompt(
+        `Add Extra Fees for Room ${roomNumber} (${booking.guestName})\n\n` +
+        `Current charges:\n` +
+        `- Room Service: $${booking.roomService}\n` +
+        `- Extra Fees: $${booking.extraFees}\n\n` +
+        `Enter fee type:\n1 = Room Service\n2 = Extra Fees`
+    );
+    
+    if (feeType !== '1' && feeType !== '2') {
+        return;
+    }
+    
+    window.currentFeeType = feeType === '1' ? 'roomService' : 'extraFees';
+    
+    // Require admin authentication
+    authPurpose = 'addExtraFees';
+    authField = '';
+    document.getElementById('adminAuthModal').classList.add('active');
+    document.getElementById('authError').style.display = 'none';
+}
+
+// Process extra fees after admin authentication
+function processExtraFees() {
+    const roomNumber = window.currentRoomForFees;
+    const feeType = window.currentFeeType;
+    
+    const booking = roomBookings.find(b => b.roomNumber === roomNumber);
+    if (!booking) return;
+    
+    const feeLabel = feeType === 'roomService' ? 'Room Service' : 'Extra Fees';
+    const currentAmount = booking[feeType];
+    
+    const newFeeStr = prompt(
+        `Add ${feeLabel} for Room ${roomNumber}\n\n` +
+        `Current ${feeLabel}: $${currentAmount}\n\n` +
+        `Enter additional amount to add:`
+    );
+    
+    if (!newFeeStr) return;
+    
+    const newFee = parseFloat(newFeeStr);
+    if (isNaN(newFee) || newFee <= 0) {
+        alert('Please enter a valid amount.');
+        return;
+    }
+    
+    // Update booking
+    booking[feeType] += newFee;
+    
+    // Save to localStorage
+    localStorage.setItem('roomBookings', JSON.stringify(roomBookings));
+    
+    // Reload tables
+    loadCurrentGuestsTable();
+    loadRoomsTable();
+    
+    alert(`Successfully added $${newFee.toFixed(2)} to ${feeLabel} for Room ${roomNumber}.\nNew total: $${booking[feeType].toFixed(2)}`);
+}
+
 
 // Load rooms table
 function loadRoomsTable() {
@@ -214,6 +343,8 @@ function verifyAdminCredentials(event) {
             enablePriceModification();
         } else if (authPurpose === 'modifyCharge') {
             enableChargeModification(authField);
+        } else if (authPurpose === 'addExtraFees') {
+            processExtraFees();
         }
     } else {
         // Show error
@@ -296,6 +427,8 @@ function handleGuestRegistration(event) {
     
     // Reload table and close modal
     loadRoomsTable();
+    loadDashboardStats();
+    loadCurrentGuestsTable();
     closeBookingModal();
 }
 
@@ -363,6 +496,8 @@ function checkOutGuest(roomNumber) {
         
         // Reload table
         loadRoomsTable();
+        loadDashboardStats();
+        loadCurrentGuestsTable();
         
         alert(`Guest checked out successfully from Room ${roomNumber}.\nFinal bill: $${total.toFixed(2)}`);
     }
