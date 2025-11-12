@@ -9,54 +9,36 @@
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-bed"></i>
-            <h3>Hotel Room Dept</h3>
-        </div>
-        
-        <div class="user-info">
-            <div class="user-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                <i class="fas fa-user"></i>
+    <header class="top-header">
+        <nav class="navbar-top">
+            <div class="navbar-brand">
+                <button class="btn-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+                <i class="fas fa-bed"></i>
+                <h3>Hotel Room Department</h3>
             </div>
-            <h5 id="userName">Room Service</h5>
-            <span class="badge bg-warning">Hotel Employee</span>
-        </div>
-        
-        <ul class="sidebar-menu">
-            <li class="active">
-                <a href="#" onclick="showSection('dashboard')">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="showSection('inventory')">
-                    <i class="fas fa-boxes"></i>
-                    <span>Room Supplies</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="showSection('request')">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Request Items</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="showSection('checklist')">
-                    <i class="fas fa-clipboard-check"></i>
-                    <span>Room Checklist</span>
-                </a>
-            </li>
+            <div class="navbar-user">
+                <div class="navbar-actions">
+                    <span class="datetime" id="datetime"></span>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h5 id="userName">Room Service</h5>
+                        <span class="badge">Hotel Room</span>
+                    </div>
+                </div>
+                <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+            </div>
+        </nav>
+        <ul class="nav-menu" id="navMenu">
+            <li class="active"><a href="#" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li><a href="#" onclick="showSection('inventory')"><i class="fas fa-boxes"></i><span>Supplies</span></a></li>
+            <li><a href="#" onclick="showSection('request')"><i class="fas fa-shopping-cart"></i><span>Request</span></a></li>
+            <li><a href="#" onclick="showSection('checklist')"><i class="fas fa-clipboard-check"></i><span>Checklist</span></a></li>
         </ul>
-        
-        <div class="sidebar-footer">
-            <button onclick="logout()" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-    </div>
-
+    </header>
     <div class="main-content">
         <nav class="top-nav">
             <button class="btn-toggle" onclick="toggleSidebar()">

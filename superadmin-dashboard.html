@@ -10,22 +10,43 @@
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-hotel"></i>
-            <h3>Stock Management</h3>
-        </div>
-        
-        <div class="user-info">
-            <div class="user-avatar">
-                <i class="fas fa-user-shield"></i>
+    <!-- Top Header -->
+    <header class="top-header">
+        <nav class="navbar-top">
+            <div class="navbar-brand">
+                <button class="btn-toggle" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <i class="fas fa-hotel"></i>
+                <h3>Hotel Stock Management</h3>
             </div>
-            <h5 id="userName">Super Admin</h5>
-            <span class="badge bg-danger">Super Admin</span>
-        </div>
+            
+            <div class="navbar-user">
+                <div class="navbar-actions">
+                    <span class="datetime" id="datetime"></span>
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge-count">5</span>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="user-details">
+                        <h5 id="userName">Super Admin</h5>
+                        <span class="badge">Super Admin</span>
+                    </div>
+                </div>
+                <button onclick="logout()" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </nav>
         
-        <ul class="sidebar-menu">
+        <!-- Navigation Menu -->
+        <ul class="nav-menu" id="navMenu">
             <li class="active">
                 <a href="#" onclick="showSection('dashboard')">
                     <i class="fas fa-tachometer-alt"></i>
@@ -35,13 +56,13 @@
             <li>
                 <a href="#" onclick="showSection('inventory')">
                     <i class="fas fa-boxes"></i>
-                    <span>All Inventory</span>
+                    <span>Inventory</span>
                 </a>
             </li>
             <li>
                 <a href="#" onclick="showSection('users')">
                     <i class="fas fa-users"></i>
-                    <span>User Management</span>
+                    <span>Users</span>
                 </a>
             </li>
             <li>
@@ -53,53 +74,32 @@
             <li>
                 <a href="#" onclick="showSection('reports')">
                     <i class="fas fa-chart-bar"></i>
-                    <span>Reports & Analytics</span>
+                    <span>Reports</span>
                 </a>
             </li>
             <li>
                 <a href="#" onclick="showSection('alerts')">
                     <i class="fas fa-bell"></i>
-                    <span>Low Stock Alerts</span>
+                    <span>Alerts</span>
                 </a>
             </li>
             <li>
                 <a href="#" onclick="showSection('transfers')">
                     <i class="fas fa-exchange-alt"></i>
-                    <span>Stock Transfers</span>
+                    <span>Transfers</span>
                 </a>
             </li>
             <li>
                 <a href="#" onclick="showSection('settings')">
                     <i class="fas fa-cog"></i>
-                    <span>System Settings</span>
+                    <span>Settings</span>
                 </a>
             </li>
         </ul>
-        
-        <div class="sidebar-footer">
-            <button onclick="logout()" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-    </div>
+    </header>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Top Navigation -->
-        <nav class="top-nav">
-            <button class="btn-toggle" onclick="toggleSidebar()">
-                <i class="fas fa-bars"></i>
-            </button>
-            <h2 id="pageTitle">Super Admin Dashboard</h2>
-            <div class="nav-right">
-                <span class="datetime" id="datetime"></span>
-                <div class="notification-bell">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge-count">5</span>
-                </div>
-            </div>
-        </nav>
-
         <!-- Dashboard Section -->
         <div id="dashboard-section" class="content-section active">
             <!-- Stats Cards -->

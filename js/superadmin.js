@@ -63,41 +63,29 @@ function updateDateTime() {
 
 // Toggle sidebar for mobile
 function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('mobile-open');
-}// Toggle sidebar
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
+    const menu = document.getElementById('navMenu');
+    menu.classList.toggle('mobile-open');
 }
 
-// Show section
+function toggleMenu() {
+    const menu = document.getElementById('navMenu');
+    menu.classList.toggle('mobile-open');
+}
+
+// Show section and update active state
 function showSection(sectionName) {
     // Hide all sections
-    document.querySelectorAll('.content-section').forEach(section => {
-        section.classList.remove('active');
-    });
-    
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
     // Show selected section
     document.getElementById(sectionName + '-section').classList.add('active');
     
     // Update active menu item
-    document.querySelectorAll('.sidebar-menu li').forEach(item => {
-        item.classList.remove('active');
-    });
+    document.querySelectorAll('.nav-menu li').forEach(i => i.classList.remove('active'));
     event.target.closest('li').classList.add('active');
     
-    // Update page title
-    const titles = {
-        'dashboard': 'Super Admin Dashboard',
-        'inventory': 'All Inventory',
-        'users': 'User Management',
-        'departments': 'Department Management',
-        'reports': 'Reports & Analytics',
-        'alerts': 'Low Stock Alerts',
-        'transfers': 'Stock Transfers',
-        'settings': 'System Settings'
-    };
-    document.getElementById('pageTitle').textContent = titles[sectionName];
+    // Close mobile menu
+    const menu = document.getElementById('navMenu');
+    if (menu) menu.classList.remove('mobile-open');
 }
 
 // Load inventory table

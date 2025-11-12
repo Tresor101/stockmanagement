@@ -23,8 +23,13 @@ function updateDateTime() {
 }
 
 function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('mobile-open');
+    const menu = document.getElementById('navMenu');
+    menu.classList.toggle('mobile-open');
+}
+
+function toggleMenu() {
+    const menu = document.getElementById('navMenu');
+    menu.classList.toggle('mobile-open');
 }
 
 function showSection(sectionName) {
@@ -34,22 +39,13 @@ function showSection(sectionName) {
     
     document.getElementById(sectionName + '-section').classList.add('active');
     
-    document.querySelectorAll('.sidebar-menu li').forEach(item => {
+    document.querySelectorAll('.nav-menu li').forEach(item => {
         item.classList.remove('active');
     });
     event.target.closest('li').classList.add('active');
     
-    const titles = {
-        'dashboard': userData.department + ' Dashboard',
-        'inventory': userData.department + ' Inventory',
-        'request': 'Request Stock',
-        'usage': 'Daily Usage',
-        'receive': 'Receive Shipment',
-        'transfer': 'Transfer Stock',
-        'checklist': 'Room Checklist'
-    };
-    
-    document.getElementById('pageTitle').textContent = titles[sectionName] || sectionName;
+    const menu = document.getElementById('navMenu');
+    if (menu) menu.classList.remove('mobile-open');
 }
 
 function updateStock() {

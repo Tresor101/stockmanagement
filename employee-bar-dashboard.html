@@ -9,21 +9,39 @@
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-glass-martini-alt"></i>
-            <h3>Bar Department</h3>
-        </div>
-        
-        <div class="user-info">
-            <div class="user-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                <i class="fas fa-user"></i>
+    <!-- Top Header -->
+    <header class="top-header">
+        <nav class="navbar-top">
+            <div class="navbar-brand">
+                <button class="btn-toggle" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <i class="fas fa-glass-martini-alt"></i>
+                <h3>Bar Department</h3>
             </div>
-            <h5 id="userName">Bar Staff</h5>
-            <span class="badge bg-info">Bar Employee</span>
-        </div>
+            
+            <div class="navbar-user">
+                <div class="navbar-actions">
+                    <span class="datetime" id="datetime"></span>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h5 id="userName">Bar Staff</h5>
+                        <span class="badge">Bar Employee</span>
+                    </div>
+                </div>
+                <button onclick="logout()" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </nav>
         
-        <ul class="sidebar-menu">
+        <!-- Navigation Menu -->
+        <ul class="nav-menu" id="navMenu">
             <li class="active">
                 <a href="#" onclick="showSection('dashboard')">
                     <i class="fas fa-tachometer-alt"></i>
@@ -33,41 +51,25 @@
             <li>
                 <a href="#" onclick="showSection('inventory')">
                     <i class="fas fa-boxes"></i>
-                    <span>Bar Inventory</span>
+                    <span>Inventory</span>
                 </a>
             </li>
             <li>
                 <a href="#" onclick="showSection('request')">
                     <i class="fas fa-shopping-cart"></i>
-                    <span>Request Stock</span>
+                    <span>Request</span>
                 </a>
             </li>
             <li>
                 <a href="#" onclick="showSection('usage')">
                     <i class="fas fa-chart-line"></i>
-                    <span>Daily Usage</span>
+                    <span>Usage</span>
                 </a>
             </li>
         </ul>
-        
-        <div class="sidebar-footer">
-            <button onclick="logout()" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-    </div>
+    </header>
 
     <div class="main-content">
-        <nav class="top-nav">
-            <button class="btn-toggle" onclick="toggleSidebar()">
-                <i class="fas fa-bars"></i>
-            </button>
-            <h2 id="pageTitle">Bar Dashboard</h2>
-            <div class="nav-right">
-                <span class="datetime" id="datetime"></span>
-            </div>
-        </nav>
-
         <div id="dashboard-section" class="content-section active">
             <div class="stats-grid">
                 <div class="stat-card stat-primary">
