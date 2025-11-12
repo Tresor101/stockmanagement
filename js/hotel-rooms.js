@@ -5,7 +5,7 @@ let roomBookings = [
     {
         roomNumber: '101',
         roomType: 'Standard',
-        rate: 50,
+        rate: 60,
         guestName: 'John Doe',
         phone: '+243 123 456 789',
         idNumber: 'ID123456',
@@ -19,7 +19,7 @@ let roomBookings = [
     {
         roomNumber: '201',
         roomType: 'Deluxe',
-        rate: 85,
+        rate: 80,
         guestName: 'Jane Smith',
         phone: '+243 987 654 321',
         idNumber: 'ID789012',
@@ -34,10 +34,10 @@ let roomBookings = [
 
 // Available rooms that haven't been booked
 const availableRooms = [
-    { number: '102', type: 'Standard', rate: 50 },
-    { number: '202', type: 'Deluxe', rate: 85 },
-    { number: '301', type: 'Suite', rate: 150 },
-    { number: '302', type: 'Suite', rate: 150 }
+    { number: '102', type: 'Standard', rate: 60 },
+    { number: '202', type: 'Deluxe', rate: 80 },
+    { number: '301', type: 'Suite', rate: 100 },
+    { number: '302', type: 'Suite', rate: 100 }
 ];
 
 // Variables for admin authentication
