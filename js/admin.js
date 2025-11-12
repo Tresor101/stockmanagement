@@ -18,7 +18,8 @@ function updateDateTime() {
 }
 
 function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('mobile-open');
 }
 
 function showSection(sectionName) {
@@ -84,3 +85,81 @@ function loadAdminInventory() {
         </tr>
     `).join('');
 }
+
+// Employee Registration Modal Functions (Admin can only register employees, not admins)
+function openEmployeeModal() {
+    document.getElementById('employeeModal').classList.add('active');
+    document.getElementById('employeeForm').reset();
+}
+
+function closeEmployeeModal() {
+    document.getElementById('employeeModal').classList.remove('active');
+    document.getElementById('employeeForm').reset();
+}
+
+function handleEmployeeRegistration(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const employeeData = {
+        fullName: formData.get('fullName'),
+        phone: formData.get('phone'),
+        address: formData.get('address'),
+        nextOfKin: {
+            name: formData.get('nextOfKinName'),
+            phone: formData.get('nextOfKinPhone'),
+            address: formData.get('nextOfKinAddress')
+        },
+        department: formData.get('department'),
+        username: formData.get('username'),
+        password: formData.get('password')
+    };
+    
+    // Get users from localStorage
+    const users = JSON.parse(localStorage.getItem('hotelUsers')) || [];
+    
+    // Check if username already exists
+    const existingUser = users.find(user => user.username === employeeData.username);
+    if (existingUser) {
+        alert('Username already exists. Please choose a different username.');
+        return;
+    }
+    
+    // Determine the role based on department
+    let authRole = 'employee-bar';
+    if (employeeData.department === 'Bar') {
+        authRole = 'employee-bar';
+    } else if (employeeData.department === 'Warehouse') {
+        authRole = 'employee-warehouse';
+    } else if (employeeData.department === 'Hotel Room') {
+        authRole = 'employee-hotel';
+    }
+    
+    const newUser = {
+        username: employeeData.username,
+        password: employeeData.password,
+        role: authRole,
+        name: employeeData.fullName,
+        department: employeeData.department,
+        phone: employeeData.phone,
+        address: employeeData.address,
+        nextOfKin: employeeData.nextOfKin,
+        createdAt: new Date().toISOString(),
+        status: 'Active'
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('hotelUsers', JSON.stringify(users));
+    
+    // Close modal and show success message
+    closeEmployeeModal();
+    alert('Employee registered successfully! Username: ' + employeeData.username + '\nDepartment: ' + employeeData.department);
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('employeeModal');
+    if (event.target === modal) {
+        closeEmployeeModal();
+    }
+});

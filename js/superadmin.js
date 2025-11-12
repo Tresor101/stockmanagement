@@ -55,13 +55,17 @@ function updateDateTime() {
         year: 'numeric', 
         month: 'short', 
         day: 'numeric',
-        hour: '2-digit',
+        hour: '2-digit', 
         minute: '2-digit'
     };
     document.getElementById('datetime').textContent = now.toLocaleString('en-US', options);
 }
 
-// Toggle sidebar
+// Toggle sidebar for mobile
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('mobile-open');
+}// Toggle sidebar
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('collapsed');
 }
@@ -346,3 +350,108 @@ function deleteUser(username) {
         alert('User deleted successfully');
     }
 }
+
+// Employee Registration Modal Functions
+function openEmployeeModal() {
+    document.getElementById('employeeModal').classList.add('active');
+    document.getElementById('employeeForm').reset();
+}
+
+function closeEmployeeModal() {
+    document.getElementById('employeeModal').classList.remove('active');
+    document.getElementById('employeeForm').reset();
+}
+
+function handleRoleChange(selectElement) {
+    const departmentGroup = document.getElementById('departmentGroup');
+    if (selectElement.value === 'employee') {
+        departmentGroup.style.display = 'block';
+        departmentGroup.querySelector('select').setAttribute('required', 'required');
+    } else {
+        departmentGroup.style.display = 'none';
+        departmentGroup.querySelector('select').removeAttribute('required');
+    }
+}
+
+function handleEmployeeRegistration(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const employeeData = {
+        fullName: formData.get('fullName'),
+        phone: formData.get('phone'),
+        address: formData.get('address'),
+        nextOfKin: {
+            name: formData.get('nextOfKinName'),
+            phone: formData.get('nextOfKinPhone'),
+            address: formData.get('nextOfKinAddress')
+        },
+        role: formData.get('role'),
+        department: formData.get('department') || 'Management',
+        username: formData.get('username'),
+        password: formData.get('password')
+    };
+    
+    // Check if username already exists
+    const existingUser = usersData.find(user => user.username === employeeData.username);
+    if (existingUser) {
+        alert('Username already exists. Please choose a different username.');
+        return;
+    }
+    
+    // Add to users database in auth.js
+    const users = JSON.parse(localStorage.getItem('hotelUsers')) || [];
+    
+    // Determine the role for auth.js
+    let authRole = 'employee-bar'; // default
+    if (employeeData.role === 'admin') {
+        authRole = 'admin';
+    } else if (employeeData.department === 'Bar') {
+        authRole = 'employee-bar';
+    } else if (employeeData.department === 'Warehouse') {
+        authRole = 'employee-warehouse';
+    } else if (employeeData.department === 'Hotel Room') {
+        authRole = 'employee-hotel';
+    }
+    
+    const newUser = {
+        username: employeeData.username,
+        password: employeeData.password,
+        role: authRole,
+        name: employeeData.fullName,
+        department: employeeData.department,
+        phone: employeeData.phone,
+        address: employeeData.address,
+        nextOfKin: employeeData.nextOfKin,
+        createdAt: new Date().toISOString(),
+        status: 'Active'
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('hotelUsers', JSON.stringify(users));
+    
+    // Add to local usersData array for display
+    usersData.push({
+        username: employeeData.username,
+        name: employeeData.fullName,
+        role: employeeData.role === 'admin' ? 'Admin' : 'Employee',
+        department: employeeData.department,
+        status: 'Active',
+        lastLogin: 'Never'
+    });
+    
+    // Reload users table
+    loadUsersTable();
+    
+    // Close modal and show success message
+    closeEmployeeModal();
+    alert('Employee registered successfully! Username: ' + employeeData.username);
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('employeeModal');
+    if (event.target === modal) {
+        closeEmployeeModal();
+    }
+});

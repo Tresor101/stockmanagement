@@ -205,7 +205,12 @@
         </div>
 
         <div id="employees-section" class="content-section">
-            <h3><i class="fas fa-users"></i> Employee Management</h3>
+            <div class="section-header">
+                <h3><i class="fas fa-users"></i> Employee Management</h3>
+                <button class="btn btn-primary" onclick="openEmployeeModal()">
+                    <i class="fas fa-user-plus"></i> Register Employee
+                </button>
+            </div>
             <p class="text-muted">Manage employee access and monitor activity.</p>
         </div>
 
@@ -222,6 +227,94 @@
         <div id="alerts-section" class="content-section">
             <h3><i class="fas fa-bell"></i> Alerts & Notifications</h3>
             <p class="text-muted">View system alerts and low stock notifications.</p>
+        </div>
+    </div>
+
+    <!-- Employee Registration Modal -->
+    <div id="employeeModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Register New Employee</h3>
+                <button class="modal-close" onclick="closeEmployeeModal()">&times;</button>
+            </div>
+            <form id="employeeForm" onsubmit="handleEmployeeRegistration(event)">
+                <div class="modal-body">
+                    <!-- Personal Information Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-user"></i> Personal Information</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name <span style="color: red;">*</span></label>
+                                <input type="text" name="fullName" required placeholder="Enter full name">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number <span style="color: red;">*</span></label>
+                                <input type="tel" name="phone" required placeholder="+243 XXX XXX XXX" pattern="[\+]?[0-9]{10,15}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Address <span style="color: red;">*</span></label>
+                            <textarea name="address" required placeholder="Enter full address" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Next of Kin Information Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-user-friends"></i> Next of Kin Information</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Next of Kin Name <span style="color: red;">*</span></label>
+                                <input type="text" name="nextOfKinName" required placeholder="Enter next of kin name">
+                            </div>
+                            <div class="form-group">
+                                <label>Next of Kin Phone <span style="color: red;">*</span></label>
+                                <input type="tel" name="nextOfKinPhone" required placeholder="+243 XXX XXX XXX" pattern="[\+]?[0-9]{10,15}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Next of Kin Address <span style="color: red;">*</span></label>
+                            <textarea name="nextOfKinAddress" required placeholder="Enter next of kin address" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Employment Details Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-briefcase"></i> Employment Details</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Department <span style="color: red;">*</span></label>
+                                <select name="department" required>
+                                    <option value="">Select Department</option>
+                                    <option value="Bar">Bar</option>
+                                    <option value="Warehouse">Warehouse</option>
+                                    <option value="Hotel Room">Hotel Room</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Credentials Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-key"></i> Account Credentials</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Username <span style="color: red;">*</span></label>
+                                <input type="text" name="username" required placeholder="Enter username" minlength="4">
+                            </div>
+                            <div class="form-group">
+                                <label>Password <span style="color: red;">*</span></label>
+                                <input type="password" name="password" required placeholder="Enter password" minlength="6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeEmployeeModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Register Employee
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

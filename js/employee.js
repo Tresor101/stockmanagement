@@ -23,7 +23,8 @@ function updateDateTime() {
 }
 
 function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('mobile-open');
 }
 
 function showSection(sectionName) {
