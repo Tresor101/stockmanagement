@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Dashboard - Hotel Stock Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/b8724cbb12.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-hotel"></i>
+            <h3>Stock Management</h3>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <h5 id="userName">Super Admin</h5>
+            <span class="badge bg-danger">Super Admin</span>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="#" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('inventory')">
+                    <i class="fas fa-boxes"></i>
+                    <span>All Inventory</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('users')">
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('departments')">
+                    <i class="fas fa-building"></i>
+                    <span>Departments</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('reports')">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports & Analytics</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('alerts')">
+                    <i class="fas fa-bell"></i>
+                    <span>Low Stock Alerts</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('transfers')">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Stock Transfers</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>System Settings</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <button onclick="logout()" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <button class="btn-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h2 id="pageTitle">Super Admin Dashboard</h2>
+            <div class="nav-right">
+                <span class="datetime" id="datetime"></span>
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge-count">5</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="content-section active">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card stat-primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="totalItems">1,247</h3>
+                        <p>Total Stock Items</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-success">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="totalUsers">45</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="lowStock">12</h3>
+                        <p>Low Stock Items</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-danger">
+                    <div class="stat-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>3</h3>
+                        <p>Departments</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-line"></i> Stock Levels by Department</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="stockChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-pie"></i> Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-history"></i> Recent Activity</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-list" id="activityList">
+                                <!-- Activities will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Section -->
+        <div id="inventory-section" class="content-section">
+            <div class="section-header">
+                <h3><i class="fas fa-boxes"></i> All Inventory</h3>
+                <button class="btn btn-primary" onclick="showAddItemModal()">
+                    <i class="fas fa-plus"></i> Add New Item
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-controls">
+                        <input type="text" id="searchInventory" placeholder="Search inventory..." class="form-control" style="width: 300px;" onkeyup="filterInventory()">
+                        <select id="filterDepartment" class="form-select" style="width: 200px;" onchange="filterInventory()">
+                            <option value="">All Departments</option>
+                            <option value="Bar">Bar</option>
+                            <option value="Warehouse">Warehouse</option>
+                            <option value="Hotel Room">Hotel Room</option>
+                        </select>
+                    </div>
+                    
+                    <div class="table-responsive mt-3">
+                        <table class="table table-hover" id="inventoryTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Item Name</th>
+                                    <th>Department</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Min Level</th>
+                                    <th>Status</th>
+                                    <th>Last Updated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                                <!-- Inventory items will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Management Section -->
+        <div id="users-section" class="content-section">
+            <div class="section-header">
+                <h3><i class="fas fa-users"></i> User Management</h3>
+                <button class="btn btn-primary" onclick="showAddUserModal()">
+                    <i class="fas fa-user-plus"></i> Add New User
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Role</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
+                                    <th>Last Login</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other sections will be similarly structured -->
+        <div id="departments-section" class="content-section">
+            <h3><i class="fas fa-building"></i> Department Management</h3>
+            <p class="text-muted">Manage departments and their stock categories.</p>
+        </div>
+
+        <div id="reports-section" class="content-section">
+            <h3><i class="fas fa-chart-bar"></i> Reports & Analytics</h3>
+            <p class="text-muted">Generate detailed reports and analytics.</p>
+        </div>
+
+        <div id="alerts-section" class="content-section">
+            <h3><i class="fas fa-bell"></i> Low Stock Alerts</h3>
+            <div id="alertsContainer"></div>
+        </div>
+
+        <div id="transfers-section" class="content-section">
+            <h3><i class="fas fa-exchange-alt"></i> Stock Transfers</h3>
+            <p class="text-muted">Manage stock transfers between departments.</p>
+        </div>
+
+        <div id="settings-section" class="content-section">
+            <h3><i class="fas fa-cog"></i> System Settings</h3>
+            <p class="text-muted">Configure system settings and preferences.</p>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/superadmin.js"></script>
+</body>
+</html>

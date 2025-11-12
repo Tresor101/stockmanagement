@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Employee Dashboard - Hotel Stock Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/b8724cbb12.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-glass-martini-alt"></i>
+            <h3>Bar Department</h3>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-user"></i>
+            </div>
+            <h5 id="userName">Bar Staff</h5>
+            <span class="badge bg-info">Bar Employee</span>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="#" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('inventory')">
+                    <i class="fas fa-boxes"></i>
+                    <span>Bar Inventory</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('request')">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Request Stock</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showSection('usage')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Daily Usage</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <button onclick="logout()" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <nav class="top-nav">
+            <button class="btn-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h2 id="pageTitle">Bar Dashboard</h2>
+            <div class="nav-right">
+                <span class="datetime" id="datetime"></span>
+            </div>
+        </nav>
+
+        <div id="dashboard-section" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card stat-primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-wine-bottle"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>34</h3>
+                        <p>Spirits & Liquor</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-success">
+                    <div class="stat-icon">
+                        <i class="fas fa-beer"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>120</h3>
+                        <p>Beers in Stock</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-wine-glass"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>48</h3>
+                        <p>Wines Available</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-danger">
+                    <div class="stat-icon">
+                        <i class="fas fa-glass-whiskey"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>3</h3>
+                        <p>Items Low Stock</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-exclamation-circle"></i> Low Stock Alert</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i> <strong>Coca Cola</strong> - Only 8 crates remaining (Min: 15)
+                            </div>
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i> <strong>Orange Juice</strong> - Only 5 bottles remaining (Min: 10)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="inventory-section" class="content-section">
+            <div class="section-header">
+                <h3><i class="fas fa-boxes"></i> Bar Inventory</h3>
+                <button class="btn btn-primary" onclick="updateStock()">
+                    <i class="fas fa-sync-alt"></i> Update Stock
+                </button>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="barInventoryTable">
+                                <tr>
+                                    <td>Whiskey - Johnny Walker</td>
+                                    <td>Spirits</td>
+                                    <td><strong>45</strong></td>
+                                    <td>Bottles</td>
+                                    <td><span class="badge badge-success">In Stock</span></td>
+                                    <td><button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Update</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Red Wine - Merlot</td>
+                                    <td>Wine</td>
+                                    <td><strong>32</strong></td>
+                                    <td>Bottles</td>
+                                    <td><span class="badge badge-success">In Stock</span></td>
+                                    <td><button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Update</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Beer - Heineken</td>
+                                    <td>Beer</td>
+                                    <td><strong>120</strong></td>
+                                    <td>Bottles</td>
+                                    <td><span class="badge badge-success">In Stock</span></td>
+                                    <td><button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Update</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Coca Cola</td>
+                                    <td>Soft Drinks</td>
+                                    <td><strong>8</strong></td>
+                                    <td>Crates</td>
+                                    <td><span class="badge badge-danger">Low Stock</span></td>
+                                    <td><button class="btn btn-sm btn-warning"><i class="fas fa-shopping-cart"></i> Request</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="request-section" class="content-section">
+            <h3><i class="fas fa-shopping-cart"></i> Request Stock</h3>
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Item Name</label>
+                            <input type="text" class="form-control" placeholder="Enter item name">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" placeholder="Enter quantity">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Reason</label>
+                            <textarea class="form-control" rows="3" placeholder="Reason for request"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="usage-section" class="content-section">
+            <h3><i class="fas fa-chart-line"></i> Daily Usage Report</h3>
+            <p class="text-muted">Track daily consumption and usage patterns.</p>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/employee.js"></script>
+</body>
+</html>

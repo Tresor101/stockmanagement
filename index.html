@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,542 +6,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fontawesome.com/kits/b8724cbb12/use">
-    <script src="https://kit.fontawesome.com/b8724cbb12.js" crossorigin="anonymous"></script>        
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" 
-    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/home.css">
-    <link rel="stylesheet" href="css/phone.css">
-    <title>Portfolio</title>
+    <script src="https://kit.fontawesome.com/b8724cbb12.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/login.css">
+    <title>Hotel Stock Management System - Login</title>
 </head>
 <body>
-  <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#" onclick="openPage('home')"><i class="fa fa-user"></i> Home</a>
-    <a href="#" onclick="openPage('about')"><i class="fa fa-address-card"></i> About</a>
-    <a href="#" onclick="openPage('service')"><i class="fa fa-list"></i> Services</a>
-    <a href="#" onclick="openPage('portfolio')"><i class="fa fa-briefcase"></i> Portfolio</a>
-    <a href="#" onclick="openPage('modules')"><i class ="fa fa-graduation-cap"></i> Module Studied</a>
-    <!--<a href="#" onclick="myFunctiondarkblue()" class="fa fa-moon"> Dark Mode</a>
-    <a href="#" onclick="myFunctionwhite()" class="fa fa-sun"> Light Mode</a>-->
-  </div>
-
-  <div id="main" >
-      <div class="btn mb-3">
-        <a onclick="openNav()" class="fa fa-bars btn btn-primary"> Menu</a>
-      </div>
-      <div class="btn mb-3">
-        <a href="Tresor K.T Curriculum Vitae.pdf" class="btn btn-primary"><i class="fa fa-download"></i> Download CV</a>
-      </div>
-
-      <div id="modules" class="tabcontent">
-        <div class="row row-cols-1 row-cols-md-3 g-4" >
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://mobilecomputingproject.files.wordpress.com/2012/10/cloudcomputing.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Advanced Wireless Technology</h4>
-              </div>
+    <div class="login-container">
+        <div class="login-overlay"></div>
+        <div class="login-content">
+            <div class="login-box">
+                <div class="logo-section">
+                    <i class="fas fa-hotel fa-3x"></i>
+                    <h1>Hotel Stock Management</h1>
+                    <p>Secure Access Portal</p>
+                </div>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i> Username
+                        </label>
+                        <input type="text" id="username" name="username" required 
+                               placeholder="Enter your username" autocomplete="username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input type="password" id="password" name="password" required 
+                               placeholder="Enter your password" autocomplete="current-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role">
+                            <i class="fas fa-user-tag"></i> Role
+                        </label>
+                        <select id="role" name="role" required>
+                            <option value="">Select your role</option>
+                            <option value="superadmin">Super Admin</option>
+                            <option value="admin">Admin</option>
+                            <option value="employee-bar">Employee - Bar</option>
+                            <option value="employee-warehouse">Employee - Warehouse</option>
+                            <option value="employee-hotel">Employee - Hotel Room</option>
+                        </select>
+                    </div>
+                    
+                    <div class="alert alert-danger" id="loginError" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="errorMessage">Invalid credentials</span>
+                    </div>
+                    
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                
+                <div class="login-footer">
+                    <p><i class="fas fa-info-circle"></i> Demo Credentials:</p>
+                    <small>Super Admin: admin/admin123 | Admin: manager/manager123 | Employee: staff/staff123</small>
+                </div>
             </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://www.sigarch.org/wp-content/uploads/2017/06/Fotolia_134476636_Subscription_Monthly_M-1080x675.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Computer Systems Security</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://assets.telegraphindia.com/telegraph/2022/Feb/1645422362_dubai.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Computing and IT in the Workplace</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://www.romexsoft.com/wp-content/uploads/2019/08/rendered-min-768x576-min-1.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Cloud Infrastructure and Services</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://bleuwire.com/wp-content/uploads/2019/12/data-center-infrastructure-automation.png.webp" 
-              class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Data Center Infrastructure</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://i.ytimg.com/vi/YS-QvfCZWvc/maxresdefault.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Distributed Computer Systems</h4>
-                <p class="card-text" style="text-align: left;">  </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://i.pinimg.com/originals/8f/23/98/8f2398dcd19c6a1776f6b55c83073c67.png" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Fundamental of Software Development using Python</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC8tO-dHg5OyFdDdWgwveD0G1CLbOAspZFlA&usqp=CAU" 
-              class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Introduction to C programming</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://pbs.twimg.com/profile_images/1255113654049128448/J5Yt92WW_400x400.png" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Introduction to Database</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://devnet.academy/wp-content/uploads/2021/12/600_488980005.png" 
-              class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Introduction to Networking</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://gfs-cudtb96.netdna-ssl.com/wp-content/uploads/2018/01/introduction_to_management_2.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Introduction to Management</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://www.ecpi.edu/sites/default/files/styles/large/public/Aug%2027%20CJ_0.png?itok=vMP3pYbz" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Introduction to Security and Forensic Technologies</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Flag_of_Malaysia.svg/1024px-Flag_of_Malaysia.svg.png" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Malaysian Studies 3</h4>
-                <p class="card-text" style="text-align: left;">  </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://www.wallpaperuse.com/wallp/16-161408_m.jpg" 
-              class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Mathematical Concept for Computing</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://study.com/cimages/course-image/computer-science-323-wireless-mobile-networking_1037823_large.jpeg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Mobile and Wireless Technology </h4>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://prod-discovery.edx-cdn.org/media/course/image/dd255d9e-5576-4455-94a9-c6d370ae2ac5-67eef679f5ca.small.jpeg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Network Security</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://cdn.educba.com/academy/wp-content/uploads/2019/02/Object-Oriented-Programming-in-Java.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Object Oriented Development with Java</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://sp-uploads.s3.amazonaws.com/uploads/services/2575350/20211206064826_61adb23a73755_operating_systems_lesson_3page0.png" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Operating Systems and Computer Architecture </h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="https://i2.wp.com/pacbasics.org/wp-content/uploads/2019/10/Network-Classification.png?fit=640%2C421&ssl=1" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Principles of Networks and Network Design</h4>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 27rem;">
-              <img src="http://www.rubysoftware.tech/wp-content/uploads/2013/12/pm.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Project Management</h4>
-              </div>
-            </div>
-          </div>
-
-        <div class="col">
-          <div class="card" style="width: 27rem;">
-            <img src="https://d1zx6djv3kb1v7.cloudfront.net/wp-content/media/2020/05/R-PROGRAMMING-LANGUAGE-i2tutorials.jpg" class="card-img-top" alt="logo">
-            <div class="card-body">
-              <h4 class="card-title">Programming for Data Analysis</h4>
-            </div>
-          </div>
         </div>
-        
-      <div class="col">
-        <div class="card" style="width: 27rem;">
-          <img src="https://secure-ecsd.elsevier.com/covers/80/Tango2/large/9780081022207.jpg" class="card-img-top" alt="logo">
-          <div class="card-body">
-            <h4 class="card-title">Research Methods for Computing and Technology</h4>
-          </div>
-        </div>
-      </div>
+    </div>
 
-      <div class="col">
-        <div class="card" style="width: 27rem;">
-          <img src="https://media.wiley.com/product_data/coverImage300/89/11194964/1119496489.jpg" class="card-img-top" alt="logo">
-          <div class="card-body">
-            <h4 class="card-title">Systems analysis and design </h4>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="card" style="width: 27rem;">
-          <img src="http://www.irisns.com/wp-content/uploads/2016/02/Network-management-system-4.0.jpg" class="card-img-top" alt="logo">
-          <div class="card-body">
-            <h4 class="card-title">System and Network Administration</h4>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="card" style="width: 27rem;">
-          <img src="https://cdn.educba.com/academy/wp-content/uploads/2021/04/Switching-Techniques.jpg" class="card-img-top" alt="logo">
-          <div class="card-body">
-            <h4 class="card-title">Switching Technologies</h4>
-            <p class="card-text" style="text-align: left;">  </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="card" style="width: 27rem;">
-          <img src="https://fiverr-res.cloudinary.com/t_mobile_web_2,q_auto,f_auto/gigs/143600351/original/71c49bfd9cb5294cf03edf7ab46c16d10cfc9fdc.jpg" 
-          class="card-img-top" alt="logo">
-          <div class="card-body">
-            <h4 class="card-title">web application</h4>
-          </div>
-        </div>
-      </div>
-  </div>
-</div>
-      <div id="home" class="tabcontent">
-        <div class="container">
-          <div class="card">
-            <img src="IMG_1464.JPG" alt="Tresor" style="width:100%">
-            <h1>Tresor Kalembo Tshibangu</h1><hr>
-            <p class="title">Network Executive / UX Developer<br>Asia Pacific University of Technology</p>
-            <p><a href="https://twitter.com/home"><i class="fa fa-twitter"></i></a>
-                <a href="https://www.linkedin.com/in/tresor-kalembo-tshibangu-7576701b5
-                "><i class="fa fa-linkedin"></i></a>
-                <a href="mailto:tresortshibangu081@gmail.com"><i class="fa-solid fa-envelope"></i></a>
-                <a href="tel:+601128838430"><i class="fa fa-mobile-phone"></i> +601128838430</a>
-                <a href="tel:+601169858271"><i class="fa fa-mobile-phone"></i> +601169858271</a>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div id="portfolio" class="tabcontent">
-        <div class="row row-cols-1 row-cols-md-4 g-4" >
-
-          <!--<div class="col">
-            <div class="card" style="width: 20rem;">
-              <img src="" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title"></h4><a href="#" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Go to the Project</a>
-              </div>
-            </div>
-          </div>-->
-
-          <div class="col">
-            <div class="card" style="width: 20rem;">
-              <img src="https://cdn.pixabay.com/photo/2016/02/05/11/17/calculator-1180740__340.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Simple Calculator</h4><a href="#" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Go to the Project</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 20rem;">
-              <img src="https://restoreprivacy.com/wp-content/uploads/2021/12/how-to-encrypt-files.png" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">File encryption</h4><a href="#" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Go to the Project</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card" style="width: 20rem;">
-              <img src="https://www.joydeepdeb.com/images/unit-converter.jpg" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Converter</h4><a href="#" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Go to the Project</a>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col">
-            <div class="card" style="width: 20rem;">
-              <img src="https://gadgetswright.com/wp-content/uploads/2020/04/Difference-Between-Login-and-Sign-up.png" class="card-img-top" alt="logo">
-              <div class="card-body">
-                <h4 class="card-title">Login/Signup</h4>
-                <a href="#" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Go to the Project</a>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-
-      <div id="service" class="tabcontent">
-        <h2>Services</h2><hr style="width:100%;height:5px;">
-        <div class="row">
-          <div class="column">
-            <div class="card">
-              <h3>Web Development Skills</h3><hr style="width:100%;height:10px;">
-              <h5>Bootstrap 5</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>Flask framework</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>MongoDb</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>JavaScript</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>HTML</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>CSS</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-            </div>
-          </div>
-        
-          <div class="column">
-            <div class="card">
-              <h3>Network Computing Skills</h3><hr style="width:100%;height:5px;">
-                <h5>Standards Routers and Switches configurations</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>Switching configurations Layer 2,3 configurations</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>Routing Configurations </h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>Undertanding of AWS Cloud services</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star "></span>
-                  <span class="fa fa-star "></span></p>
-                <h5>Undertanding of Wireless Technology</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-                <h5>Data Center Knowledge</h5>
-                <p><span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span></p>
-            </div>
-          </div>
-          
-          <div class="column">
-            <div class="card">
-              <h3>Interpersonal Skills</h3><hr style="width:100%;height:5px;">
-              <h5>Communication skills</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>              
-              <h5>Listening skills</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>               
-              <h5>Collaboration</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>              
-              <h5>Adaptability</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-              <h5>Teaching Skills</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-              <h5>Team work</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>   
-            </div>
-          </div>
-
-          <div class="column">
-            <div class="card">
-              <h3>Coding/Programming Skills</h3><hr style="width:100%;height:5px;">
-              <h5>C Programming</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>              
-              <h5>Python Programming</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>               
-              <h5>Object Oriented in Java</h5>
-                <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>              
-              <h5>R Programming</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>
-              <h5>C++</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>
-              <h5>MySQL</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span></p>
-              <h5>Basics of electronics for beginners</h5>
-              <p><span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div id="about" class="tabcontent">
-        <div class="clearfix" style="background-color: #4f94d4;max-height: 500px;">
-          <img src="IMG_1464.JPG" class="col-md-6 float-md-end mb-3 ms-md-3"  style="max-width: 500px;max-height: 500px;">
-          <h1 class="card-title">About Me</h1>
-                <h3 class="card-text">My name is Tshibangu Tresor Kalembo and I am seeking an entry level role to enhance and explore my technical knowledge gained at 
-                  Asia Pacific University of Technology & Innovation (APU) in the last 3 years as well as at KidoCode for 4 months. 
-                  I am currently working on getting my BSC (Hons) In Information Technology with a Specialism in Network Computing and currently 
-                  on my last semester of my final year to obtain my degree.I am also working as a per time coding teacher at iTrainKids. 
-                  In order to maximize my chance to be the best employee possible, 
-                  I am a self taught person who is a good team palyer as well as a good team leader.</h3>
-                <p class="card-text"><small class="text-muted">Last updated 17th of September,2022</small></p>
-        </div>
-      </div>
-  </div>
-  <script src="Js/JavaScript.js"> </script>
+    <script src="js/auth.js"></script>
 </body>
 </html>
