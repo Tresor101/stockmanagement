@@ -49,6 +49,12 @@
                 </a>
             </li>
             <li>
+                <a href="#" onclick="showSection('sales')">
+                    <i class="fas fa-cash-register"></i>
+                    <span>Sales</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" onclick="showSection('inventory')">
                     <i class="fas fa-boxes"></i>
                     <span>Inventory</span>
@@ -58,12 +64,6 @@
                 <a href="#" onclick="showSection('request')">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Request</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="showSection('usage')">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Usage</span>
                 </a>
             </li>
         </ul>
@@ -125,6 +125,79 @@
                             </div>
                             <div class="alert alert-warning">
                                 <i class="fas fa-exclamation-triangle"></i> <strong>Orange Juice</strong> - Only 5 bottles remaining (Min: 10)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Management Section -->
+        <div id="sales-section" class="content-section">
+            <div class="section-header">
+                <h3><i class="fas fa-cash-register"></i> Sales Management</h3>
+                <button class="btn btn-primary" onclick="openSaleModal()">
+                    <i class="fas fa-plus"></i> Register Sale
+                </button>
+            </div>
+
+            <!-- Sales Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card stat-success">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="todaySales">$0.00</h3>
+                        <p>Today's Sales</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="totalTransactions">0</h3>
+                        <p>Total Transactions</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-info">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="averageSale">$0.00</h3>
+                        <p>Average Sale</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Table -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-receipt"></i> Today's Sales Records</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Items</th>
+                                            <th>Quantity</th>
+                                            <th>Amount</th>
+                                            <th>Payment Method</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="salesTableBody">
+                                        <!-- Sales will be loaded here -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -215,14 +288,117 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="usage-section" class="content-section">
-            <h3><i class="fas fa-chart-line"></i> Daily Usage Report</h3>
-            <p class="text-muted">Track daily consumption and usage patterns.</p>
+    <!-- Sale Registration Modal -->
+    <div id="saleModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cash-register"></i> Register Sale</h3>
+                <button class="modal-close" onclick="closeSaleModal()">&times;</button>
+            </div>
+            <form id="saleForm" onsubmit="handleSaleRegistration(event)">
+                <div class="modal-body">
+                    <!-- Sale Items Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-list"></i> Sale Items</h4>
+                        <div id="saleItemsContainer">
+                            <div class="sale-item-row">
+                                <div class="form-row">
+                                    <div class="form-group" style="flex: 2;">
+                                        <label>Item <span style="color: red;">*</span></label>
+                                        <select name="itemName[]" required onchange="updateItemPrice(this)">
+                                            <option value="">Select Item</option>
+                                            <option value="Beer - Heineken" data-price="3.50">Beer - Heineken ($3.50)</option>
+                                            <option value="Beer - Primus" data-price="3.00">Beer - Primus ($3.00)</option>
+                                            <option value="Whiskey - Johnny Walker" data-price="45.00">Whiskey - Johnny Walker ($45.00)</option>
+                                            <option value="Red Wine - Merlot" data-price="25.00">Red Wine - Merlot ($25.00)</option>
+                                            <option value="White Wine - Chardonnay" data-price="22.00">White Wine - Chardonnay ($22.00)</option>
+                                            <option value="Vodka - Smirnoff" data-price="35.00">Vodka - Smirnoff ($35.00)</option>
+                                            <option value="Coca Cola" data-price="2.00">Coca Cola ($2.00)</option>
+                                            <option value="Sprite" data-price="2.00">Sprite ($2.00)</option>
+                                            <option value="Orange Juice" data-price="3.00">Orange Juice ($3.00)</option>
+                                            <option value="Water - Bottle" data-price="1.50">Water - Bottle ($1.50)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Quantity <span style="color: red;">*</span></label>
+                                        <input type="number" name="itemQuantity[]" min="1" value="1" required onchange="calculateItemTotal(this)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price ($)</label>
+                                        <input type="number" name="itemPrice[]" step="0.01" readonly class="item-price" style="background: #f0f0f0;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Total ($)</label>
+                                        <input type="number" name="itemTotal[]" step="0.01" readonly class="item-total" style="background: #f0f0f0;">
+                                    </div>
+                                    <div class="form-group" style="flex: 0 0 50px;">
+                                        <label>&nbsp;</label>
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeItemRow(this)" style="width: 100%;">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="addItemRow()">
+                            <i class="fas fa-plus"></i> Add Another Item
+                        </button>
+                    </div>
+
+                    <!-- Payment Details Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-credit-card"></i> Payment Details</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Payment Method <span style="color: red;">*</span></label>
+                                <select name="paymentMethod" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="Mobile Money">Mobile Money</option>
+                                    <option value="Room Charge">Room Charge</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="roomNumberGroup" style="display: none;">
+                                <label>Room Number</label>
+                                <input type="text" name="roomNumber" placeholder="Enter room number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes (Optional)</label>
+                            <textarea name="saleNotes" rows="2" placeholder="Any additional notes about this sale"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Total Summary Section -->
+                    <div class="form-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <h4 style="color: white; border-bottom-color: rgba(255,255,255,0.3);"><i class="fas fa-calculator"></i> Sale Summary</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label style="color: white;">Total Items</label>
+                                <input type="text" id="totalItems" readonly style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);">
+                            </div>
+                            <div class="form-group">
+                                <label style="color: white; font-size: 18px; font-weight: bold;">Total Amount ($)</label>
+                                <input type="text" id="totalAmount" readonly style="background: rgba(255,255,255,0.3); color: white; font-size: 24px; font-weight: bold; border-color: rgba(255,255,255,0.3);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeSaleModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-check"></i> Complete Sale
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script src="js/auth.js"></script>
     <script src="js/employee.js"></script>
+    <script src="js/bar-sales.js"></script>
 </body>
 </html>
