@@ -85,15 +85,24 @@ function loadCurrentGuestsTable() {
     bookings.forEach(booking => {
         const checkInDate = new Date(booking.checkIn);
         const currentDate = new Date();
-        const timeSpent = Math.floor((currentDate - checkInDate) / (1000 * 60 * 60 * 24));
-        const daysText = timeSpent === 1 ? 'day' : 'days';
+        
+        // Calculate time difference in milliseconds
+        const timeDiff = currentDate - checkInDate;
+        
+        // Calculate days, hours, and minutes
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        
+        // Format timestamp
+        const timeSpentFormatted = `${days}d:${hours}h:${minutes}m`;
         
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${booking.guestName}</td>
             <td>${booking.roomNumber}</td>
             <td>${booking.roomType}</td>
-            <td>${timeSpent} ${daysText}</td>
+            <td>${timeSpentFormatted}</td>
             <td>${formatDate(booking.checkIn)}</td>
             <td>${formatDate(booking.checkOut)}</td>
             <td>
