@@ -34,6 +34,7 @@
         </nav>
         <ul class="nav-menu" id="navMenu">
             <li class="active"><a href="#" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li><a href="#" onclick="showSection('rooms')"><i class="fas fa-door-open"></i><span>Rooms</span></a></li>
             <li><a href="#" onclick="showSection('inventory')"><i class="fas fa-boxes"></i><span>Supplies</span></a></li>
             <li><a href="#" onclick="showSection('request')"><i class="fas fa-shopping-cart"></i><span>Request</span></a></li>
             <li><a href="#" onclick="showSection('checklist')"><i class="fas fa-clipboard-check"></i><span>Checklist</span></a></li>
@@ -152,6 +153,43 @@
             <p class="text-muted">Complete list of hotel room supplies and amenities.</p>
         </div>
 
+        <!-- Room Management Section -->
+        <div id="rooms-section" class="content-section">
+            <div class="section-header">
+                <h3><i class="fas fa-door-open"></i> Room Management</h3>
+                <button class="btn btn-primary" onclick="openBookingModal()">
+                    <i class="fas fa-user-plus"></i> Register Guest
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-bed"></i> Room Status & Bookings</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Room No.</th>
+                                    <th>Room Type</th>
+                                    <th>Rate/Night</th>
+                                    <th>Guest Name</th>
+                                    <th>Check-In</th>
+                                    <th>Check-Out</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="roomsTableBody">
+                                <!-- Rooms will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="request-section" class="content-section">
             <h3><i class="fas fa-shopping-cart"></i> Request Items</h3>
             <p class="text-muted">Request additional supplies for hotel rooms.</p>
@@ -163,7 +201,191 @@
         </div>
     </div>
 
+    <!-- Guest Registration/Booking Modal -->
+    <div id="bookingModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Register Guest & Book Room</h3>
+                <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <form id="bookingForm" onsubmit="handleGuestRegistration(event)">
+                <div class="modal-body">
+                    <!-- Guest Information Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-user"></i> Guest Information</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name <span style="color: red;">*</span></label>
+                                <input type="text" name="guestName" required placeholder="Enter guest's full name">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number <span style="color: red;">*</span></label>
+                                <input type="tel" name="guestPhone" required placeholder="+243 XXX XXX XXX" pattern="[\+]?[0-9]{10,15}">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ID Number <span style="color: red;">*</span></label>
+                                <input type="text" name="idNumber" required placeholder="Enter ID/Passport number">
+                            </div>
+                            <div class="form-group">
+                                <label>Reason for Traveling <span style="color: red;">*</span></label>
+                                <select name="travelReason" required>
+                                    <option value="">Select Reason</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Tourism">Tourism</option>
+                                    <option value="Conference">Conference</option>
+                                    <option value="Family Visit">Family Visit</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Room Details Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-door-open"></i> Room Details</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Room Number <span style="color: red;">*</span></label>
+                                <select name="roomNumber" required onchange="updateRoomPrice(this)">
+                                    <option value="">Select Room</option>
+                                    <option value="101" data-type="Standard" data-price="50">101 - Standard</option>
+                                    <option value="102" data-type="Standard" data-price="50">102 - Standard</option>
+                                    <option value="201" data-type="Deluxe" data-price="85">201 - Deluxe</option>
+                                    <option value="202" data-type="Deluxe" data-price="85">202 - Deluxe</option>
+                                    <option value="301" data-type="Suite" data-price="150">301 - Suite</option>
+                                    <option value="302" data-type="Suite" data-price="150">302 - Suite</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Room Type</label>
+                                <input type="text" id="roomType" readonly placeholder="Auto-filled">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Check-In Date <span style="color: red;">*</span></label>
+                                <input type="date" name="checkInDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Check-Out Date <span style="color: red;">*</span></label>
+                                <input type="date" name="checkOutDate" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Rate per Night ($) <span style="color: red;">*</span></label>
+                                <div style="position: relative;">
+                                    <input type="number" id="roomRate" name="roomRate" required readonly style="background: #f0f0f0;">
+                                    <button type="button" onclick="requestPriceModification()" class="btn btn-sm" style="position: absolute; right: 5px; top: 5px; padding: 5px 10px;">
+                                        <i class="fas fa-edit"></i> Modify
+                                    </button>
+                                </div>
+                                <small style="color: #7f8c8d;">Admin credentials required to modify price</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Number of Nights</label>
+                                <input type="number" id="numNights" readonly placeholder="Auto-calculated">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Charges Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-dollar-sign"></i> Additional Charges</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Room Service ($)</label>
+                                <div style="position: relative;">
+                                    <input type="number" name="roomService" id="roomService" value="0" step="0.01" min="0" readonly style="background: #f0f0f0;">
+                                    <button type="button" onclick="requestChargeModification('roomService')" class="btn btn-sm" style="position: absolute; right: 5px; top: 5px; padding: 5px 10px;">
+                                        <i class="fas fa-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Extra Fees ($)</label>
+                                <div style="position: relative;">
+                                    <input type="number" name="extraFees" id="extraFees" value="0" step="0.01" min="0" readonly style="background: #f0f0f0;">
+                                    <button type="button" onclick="requestChargeModification('extraFees')" class="btn btn-sm" style="position: absolute; right: 5px; top: 5px; padding: 5px 10px;">
+                                        <i class="fas fa-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes/Description for Additional Charges</label>
+                            <textarea name="chargeNotes" rows="2" placeholder="Enter description for room service or extra fees"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Summary Section -->
+                    <div class="form-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <h4 style="color: white; border-bottom-color: rgba(255,255,255,0.3);"><i class="fas fa-calculator"></i> Booking Summary</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label style="color: white;">Room Charges</label>
+                                <input type="text" id="roomCharges" readonly style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);">
+                            </div>
+                            <div class="form-group">
+                                <label style="color: white;">Additional Charges</label>
+                                <input type="text" id="additionalCharges" readonly style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label style="color: white; font-size: 18px; font-weight: bold;">Total Amount ($)</label>
+                            <input type="text" id="totalAmount" readonly style="background: rgba(255,255,255,0.3); color: white; font-size: 24px; font-weight: bold; border-color: rgba(255,255,255,0.3);">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeBookingModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Confirm Booking
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Authentication Modal -->
+    <div id="adminAuthModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-shield-alt"></i> Admin Authentication Required</h3>
+                <button class="modal-close" onclick="closeAdminAuthModal()">&times;</button>
+            </div>
+            <form id="adminAuthForm" onsubmit="verifyAdminCredentials(event)">
+                <div class="modal-body">
+                    <p style="color: #7f8c8d; margin-bottom: 20px;">
+                        <i class="fas fa-info-circle"></i> Admin credentials are required to modify prices or add additional charges.
+                    </p>
+                    <div class="form-group">
+                        <label>Admin Username <span style="color: red;">*</span></label>
+                        <input type="text" id="adminUsername" required placeholder="Enter admin username">
+                    </div>
+                    <div class="form-group">
+                        <label>Admin Password <span style="color: red;">*</span></label>
+                        <input type="password" id="adminPassword" required placeholder="Enter admin password">
+                    </div>
+                    <div id="authError" style="display: none; background: #ffe6e6; color: #e74c3c; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                        <i class="fas fa-exclamation-triangle"></i> Invalid credentials. Please try again.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeAdminAuthModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-check"></i> Verify & Continue
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="js/auth.js"></script>
     <script src="js/employee.js"></script>
+    <script src="js/hotel-rooms.js"></script>
 </body>
 </html>
