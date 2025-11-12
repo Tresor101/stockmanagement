@@ -484,16 +484,76 @@ function checkOutGuest(roomNumber) {
     const booking = roomBookings.find(b => b.roomNumber === roomNumber);
     if (!booking) return;
     
+    const checkInDate = new Date(booking.checkIn);
+    const checkOutDate = new Date();
     const nights = calculateNights(booking.checkIn, booking.checkOut);
     const roomCharges = nights * booking.rate;
     const additionalCharges = booking.roomService + booking.extraFees;
     const total = roomCharges + additionalCharges;
     
+    // Calculate time spent
+    const timeDiff = checkOutDate - checkInDate;
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    // Create detailed bill
+    let bill = `╔════════════════════════════════════════════════╗\n`;
+    bill += `║          HOTEL CHECKOUT INVOICE                ║\n`;
+    bill += `╚════════════════════════════════════════════════╝\n\n`;
+    
+    bill += `GUEST INFORMATION:\n`;
+    bill += `─────────────────────────────────────────────────\n`;
+    bill += `Name:           ${booking.guestName}\n`;
+    bill += `Phone:          ${booking.phone}\n`;
+    bill += `ID Number:      ${booking.idNumber}\n`;
+    bill += `Travel Reason:  ${booking.travelReason}\n\n`;
+    
+    bill += `ROOM DETAILS:\n`;
+    bill += `─────────────────────────────────────────────────\n`;
+    bill += `Room Number:    ${booking.roomNumber}\n`;
+    bill += `Room Type:      ${booking.roomType}\n`;
+    bill += `Rate per Night: $${booking.rate.toFixed(2)}\n\n`;
+    
+    bill += `STAY DURATION:\n`;
+    bill += `─────────────────────────────────────────────────\n`;
+    bill += `Check-In:       ${formatDate(booking.checkIn)}\n`;
+    bill += `Check-Out:      ${formatDate(checkOutDate.toISOString().split('T')[0])}\n`;
+    bill += `Number of Nights: ${nights}\n`;
+    bill += `Time Spent:     ${days}d:${hours}h:${minutes}m\n\n`;
+    
+    bill += `CHARGES BREAKDOWN:\n`;
+    bill += `═════════════════════════════════════════════════\n`;
+    bill += `Room Charges:\n`;
+    bill += `  ${nights} nights × $${booking.rate.toFixed(2)} = $${roomCharges.toFixed(2)}\n\n`;
+    
+    if (booking.roomService > 0) {
+        bill += `Room Service:                    $${booking.roomService.toFixed(2)}\n`;
+    }
+    if (booking.extraFees > 0) {
+        bill += `Extra Fees:                      $${booking.extraFees.toFixed(2)}\n`;
+    }
+    if (booking.chargeNotes) {
+        bill += `Notes: ${booking.chargeNotes}\n`;
+    }
+    
+    bill += `─────────────────────────────────────────────────\n`;
+    bill += `Subtotal (Room):                 $${roomCharges.toFixed(2)}\n`;
+    bill += `Subtotal (Additional):           $${additionalCharges.toFixed(2)}\n`;
+    bill += `═════════════════════════════════════════════════\n`;
+    bill += `TOTAL AMOUNT DUE:                $${total.toFixed(2)}\n`;
+    bill += `═════════════════════════════════════════════════\n\n`;
+    bill += `Thank you for staying with us!\n`;
+    bill += `Date: ${new Date().toLocaleString('en-US')}`;
+    
+    // Show bill
+    alert(bill);
+    
+    // Confirm checkout
     const confirm = window.confirm(
-        `Check out guest from Room ${roomNumber}?\n\n` +
-        `Guest: ${booking.guestName}\n` +
-        `Total Amount Due: $${total.toFixed(2)}\n\n` +
-        `Click OK to proceed with checkout.`
+        `Proceed with checkout for ${booking.guestName}?\n\n` +
+        `Total Amount: $${total.toFixed(2)}\n\n` +
+        `Click OK to complete checkout.`
     );
     
     if (confirm) {
@@ -508,7 +568,7 @@ function checkOutGuest(roomNumber) {
         loadDashboardStats();
         loadCurrentGuestsTable();
         
-        alert(`Guest checked out successfully from Room ${roomNumber}.\nFinal bill: $${total.toFixed(2)}`);
+        alert(`Guest checked out successfully from Room ${roomNumber}.\n\nPayment received: $${total.toFixed(2)}\n\nThank you!`);
     }
 }
 
