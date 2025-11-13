@@ -57,29 +57,28 @@ class Components {
     }
 
     // Create a text input
-    static textInput(name, placeholder = '', value = '', required = false, readonly = false) {
-        return `<input type="text" name="${name}" value="${value}" placeholder="${placeholder}" 
-                ${required ? 'required' : ''} ${readonly ? 'readonly' : ''}>`;
+    static textInput(name, placeholder = '', required = false, value = '') {
+        return `<input type="text" class="form-control" name="${name}" value="${value}" 
+                placeholder="${placeholder}" ${required ? 'required' : ''}>`;
     }
 
     // Create a number input
-    static numberInput(name, value = '', min = '', max = '', step = '1', required = false, readonly = false) {
-        return `<input type="number" name="${name}" value="${value}" 
-                min="${min}" max="${max}" step="${step}"
-                ${required ? 'required' : ''} ${readonly ? 'readonly' : ''}>`;
+    static numberInput(name, placeholder = '', required = false, value = '', min = '', max = '', step = '1') {
+        return `<input type="number" class="form-control" name="${name}" value="${value}" 
+                placeholder="${placeholder}" min="${min}" max="${max}" step="${step}"
+                ${required ? 'required' : ''}>`;
     }
 
     // Create a select dropdown
-    static select(name, options, selected = '', required = false) {
+    static select(name, options, required = false, selected = '') {
         const optionsHTML = options.map(opt => {
             const value = typeof opt === 'object' ? opt.value : opt;
             const label = typeof opt === 'object' ? opt.label : opt;
-            const attrs = typeof opt === 'object' && opt.attrs ? opt.attrs : '';
-            return `<option value="${value}" ${value === selected ? 'selected' : ''} ${attrs}>${label}</option>`;
+            return `<option value="${value}" ${value === selected ? 'selected' : ''}>${label}</option>`;
         }).join('');
 
         return `
-            <select name="${name}" ${required ? 'required' : ''}>
+            <select class="form-control" name="${name}" ${required ? 'required' : ''}>
                 <option value="">Select...</option>
                 ${optionsHTML}
             </select>
@@ -87,14 +86,14 @@ class Components {
     }
 
     // Create a textarea
-    static textarea(name, placeholder = '', rows = 3, value = '', required = false) {
-        return `<textarea name="${name}" rows="${rows}" placeholder="${placeholder}" 
-                ${required ? 'required' : ''}>${value}</textarea>`;
+    static textarea(name, placeholder = '', required = false, value = '', rows = 3) {
+        return `<textarea class="form-control" name="${name}" rows="${rows}" 
+                placeholder="${placeholder}" ${required ? 'required' : ''}>${value}</textarea>`;
     }
 
     // Create a date input
-    static dateInput(name, value = '', required = false, min = '', max = '') {
-        return `<input type="date" name="${name}" value="${value}" 
+    static dateInput(name, required = false, value = '', min = '', max = '') {
+        return `<input type="date" class="form-control" name="${name}" value="${value}" 
                 ${min ? `min="${min}"` : ''} ${max ? `max="${max}"` : ''}
                 ${required ? 'required' : ''}>`;
     }
@@ -144,14 +143,19 @@ class Components {
 
 // Modal Manager
 class Modal {
-    static show(id, title, content, buttons = [], size = 'medium') {
-        let modal = document.getElementById(id);
+    static show(title, content, buttons = [], size = 'medium') {
+        const modalId = 'dynamicModal';
+        let modal = document.getElementById(modalId);
         
         // Create modal if it doesn't exist
         if (!modal) {
-            modal = this.create(id, size);
+            modal = this.create(modalId, size);
             document.body.appendChild(modal);
         }
+
+        // Update size
+        const modalContent = modal.querySelector('.modal-content');
+        modalContent.className = `modal-content modal-${size}`;
 
         // Update content
         modal.querySelector('.modal-title').textContent = title;
@@ -160,8 +164,9 @@ class Modal {
         // Update buttons
         const footer = modal.querySelector('.modal-footer');
         footer.innerHTML = buttons.map(btn => 
-            `<button type="${btn.type || 'button'}" class="${btn.class}" onclick="${btn.onClick}">
-                ${btn.icon ? `<i class="fas fa-${btn.icon}"></i>` : ''} ${btn.text}
+            `<button type="${btn.type || 'button'}" class="btn ${btn.class}" 
+                onclick="(function(){${typeof btn.onClick === 'function' ? btn.onClick.toString() + '()' : btn.onClick}})()">
+                ${btn.icon ? `<i class="fas fa-${btn.icon}"></i>` : ''} ${btn.label || btn.text || 'OK'}
             </button>`
         ).join('');
 
@@ -176,37 +181,51 @@ class Modal {
             <div class="modal-content modal-${size}">
                 <div class="modal-header">
                     <h3 class="modal-title"></h3>
-                    <button class="modal-close" onclick="Modal.close('${id}')">&times;</button>
+                    <button class="modal-close" onclick="Modal.close()">&times;</button>
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer"></div>
             </div>
         `;
+        
+        // Close on overlay click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                Modal.close();
+            }
+        });
+        
         return modal;
     }
 
-    static close(id) {
-        const modal = document.getElementById(id);
+    static close() {
+        const modal = document.getElementById('dynamicModal');
         if (modal) {
             modal.classList.remove('active');
             // Reset form if exists
             const form = modal.querySelector('form');
             if (form) form.reset();
+            // Clear validation errors
+            modal.querySelectorAll('.field-error').forEach(el => el.remove());
+            modal.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
         }
     }
 
     static confirm(title, message, onConfirm, onCancel = null) {
-        this.show('confirmModal', title, `<p>${message}</p>`, [
+        this.show(title, `<p>${message}</p>`, [
             { 
-                text: 'Cancel', 
-                class: 'btn-cancel', 
-                onClick: onCancel || "Modal.close('confirmModal')" 
+                label: 'Cancel', 
+                class: 'btn-secondary', 
+                onClick: onCancel || Modal.close
             },
             { 
-                text: 'Confirm', 
+                label: 'Confirm', 
                 class: 'btn-primary', 
                 icon: 'check',
-                onClick: `(${onConfirm.toString()})(); Modal.close('confirmModal');` 
+                onClick: () => {
+                    if (typeof onConfirm === 'function') onConfirm();
+                    Modal.close();
+                }
             }
         ]);
     }
@@ -219,85 +238,99 @@ class Modal {
             info: 'info-circle'
         };
 
-        this.show('alertModal', title, 
+        this.show(title, 
             `<div class="alert alert-${type}">
                 <i class="fas fa-${icons[type]}"></i> ${message}
             </div>`, 
-            [{ text: 'OK', class: 'btn-primary', onClick: "Modal.close('alertModal')" }]
+            [{ label: 'OK', class: 'btn-primary', onClick: Modal.close }]
         );
     }
 }
 
 // Form Validator
 class FormValidator {
-    static validate(formId, rules) {
-        const form = document.getElementById(formId);
-        const formData = new FormData(form);
-        const errors = {};
+    constructor() {
+        this.errors = {};
+    }
+
+    validate(form, rules) {
+        // Accept both form element and form ID
+        const formElement = typeof form === 'string' ? document.getElementById(form) : form;
+        if (!formElement) return false;
+
+        const formData = new FormData(formElement);
+        this.errors = {};
 
         for (let [field, ruleSet] of Object.entries(rules)) {
             const value = formData.get(field);
             const fieldErrors = [];
 
             if (ruleSet.required && !value) {
-                fieldErrors.push(`${ruleSet.label || field} is required`);
+                fieldErrors.push(`This field is required`);
             }
 
             if (value) {
                 if (ruleSet.min !== undefined && parseFloat(value) < ruleSet.min) {
-                    fieldErrors.push(`${ruleSet.label || field} must be at least ${ruleSet.min}`);
+                    fieldErrors.push(`Must be at least ${ruleSet.min}`);
                 }
 
                 if (ruleSet.max !== undefined && parseFloat(value) > ruleSet.max) {
-                    fieldErrors.push(`${ruleSet.label || field} must not exceed ${ruleSet.max}`);
+                    fieldErrors.push(`Must not exceed ${ruleSet.max}`);
                 }
 
                 if (ruleSet.minLength && value.length < ruleSet.minLength) {
-                    fieldErrors.push(`${ruleSet.label || field} must be at least ${ruleSet.minLength} characters`);
+                    fieldErrors.push(`Must be at least ${ruleSet.minLength} characters`);
                 }
 
                 if (ruleSet.maxLength && value.length > ruleSet.maxLength) {
-                    fieldErrors.push(`${ruleSet.label || field} must not exceed ${ruleSet.maxLength} characters`);
+                    fieldErrors.push(`Must not exceed ${ruleSet.maxLength} characters`);
                 }
 
                 if (ruleSet.pattern && !ruleSet.pattern.test(value)) {
-                    fieldErrors.push(ruleSet.patternMessage || `${ruleSet.label || field} format is invalid`);
+                    fieldErrors.push(ruleSet.patternMessage || `Format is invalid`);
                 }
 
                 if (ruleSet.custom && !ruleSet.custom(value, formData)) {
-                    fieldErrors.push(ruleSet.customMessage || `${ruleSet.label || field} is invalid`);
+                    fieldErrors.push(ruleSet.customMessage || `Value is invalid`);
                 }
             }
 
             if (fieldErrors.length > 0) {
-                errors[field] = fieldErrors;
+                this.errors[field] = fieldErrors;
             }
         }
 
-        return {
-            valid: Object.keys(errors).length === 0,
-            errors,
-            data: Object.fromEntries(formData)
-        };
+        const isValid = Object.keys(this.errors).length === 0;
+        if (!isValid) {
+            this.showErrors(this.errors, formElement);
+        }
+
+        return isValid;
     }
 
-    static showErrors(errors) {
+    showErrors(errors, formElement = null) {
+        // Clear previous errors first
+        this.clearErrors(formElement);
+
         for (let [field, messages] of Object.entries(errors)) {
-            const input = document.querySelector(`[name="${field}"]`);
+            const input = formElement 
+                ? formElement.querySelector(`[name="${field}"]`)
+                : document.querySelector(`[name="${field}"]`);
+            
             if (input) {
                 input.classList.add('error');
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'field-error';
                 errorDiv.textContent = messages[0];
-                input.parentNode.appendChild(errorDiv);
+                input.parentElement.appendChild(errorDiv);
             }
         }
     }
 
-    static clearErrors(formId) {
-        const form = document.getElementById(formId);
-        form.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
-        form.querySelectorAll('.field-error').forEach(el => el.remove());
+    clearErrors(formElement = null) {
+        const container = formElement || document;
+        container.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+        container.querySelectorAll('.field-error').forEach(el => el.remove());
     }
 }
 

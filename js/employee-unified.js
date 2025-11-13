@@ -368,14 +368,192 @@ class EmployeeDashboard {
         document.getElementById('datetime').textContent = now.toLocaleString('en-US', options);
     }
 
-    // Role-specific actions
+    // Role-specific actions - Receptionist
     openBookingModal() {
-        // Will create booking modal
-        Modal.alert('Feature', 'Booking modal will be created', 'info');
+        const modalContent = `
+            <form id="bookingForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        ${Components.formGroup('Guest Name', Components.textInput('guestName', 'Enter guest name', true))}
+                    </div>
+                    <div class="col-md-6">
+                        ${Components.formGroup('Phone Number', Components.textInput('phone', '+243 XXX XXX XXX', true))}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        ${Components.formGroup('ID Number', Components.textInput('idNumber', 'Enter ID/Passport number', true))}
+                    </div>
+                    <div class="col-md-6">
+                        ${Components.formGroup('Travel Reason', Components.select('travelReason', [
+                            { value: 'Business', label: 'Business' },
+                            { value: 'Tourism', label: 'Tourism' },
+                            { value: 'Personal', label: 'Personal' },
+                            { value: 'Other', label: 'Other' }
+                        ], true))}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        ${Components.formGroup('Room Number', Components.select('roomNumber', this.getAvailableRoomsOptions(), true))}
+                    </div>
+                    <div class="col-md-4">
+                        ${Components.formGroup('Check-In Date', Components.dateInput('checkIn', true))}
+                    </div>
+                    <div class="col-md-4">
+                        ${Components.formGroup('Check-Out Date', Components.dateInput('checkOut', true))}
+                    </div>
+                </div>
+            </form>
+        `;
+
+        Modal.show('Register Guest', modalContent, [
+            { label: 'Cancel', class: 'btn-secondary', onClick: () => Modal.close() },
+            { label: 'Register Guest', class: 'btn-primary', onClick: () => this.submitBooking() }
+        ]);
+
+        // Set default check-in to today
+        document.getElementById('checkIn').value = new Date().toISOString().split('T')[0];
+    }
+
+    getAvailableRoomsOptions() {
+        const bookings = JSON.parse(localStorage.getItem('roomBookings')) || [];
+        const allRooms = [
+            { number: '101', type: 'Standard', rate: 60 },
+            { number: '102', type: 'Standard', rate: 60 },
+            { number: '201', type: 'Deluxe', rate: 80 },
+            { number: '202', type: 'Deluxe', rate: 80 },
+            { number: '301', type: 'Suite', rate: 100 },
+            { number: '302', type: 'Suite', rate: 100 }
+        ];
+
+        return allRooms
+            .filter(room => !bookings.find(b => b.roomNumber === room.number))
+            .map(room => ({ 
+                value: room.number, 
+                label: `Room ${room.number} - ${room.type} ($${room.rate}/night)` 
+            }));
+    }
+
+    submitBooking() {
+        const form = document.getElementById('bookingForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        // Validate form
+        const validator = new FormValidator();
+        const isValid = validator.validate(form, {
+            guestName: { required: true, minLength: 3 },
+            phone: { required: true, pattern: /^\+?[\d\s]+$/ },
+            idNumber: { required: true, minLength: 5 },
+            travelReason: { required: true },
+            roomNumber: { required: true },
+            checkIn: { required: true },
+            checkOut: { required: true }
+        });
+
+        if (!isValid) return;
+
+        // Validate dates
+        const checkInDate = new Date(data.checkIn);
+        const checkOutDate = new Date(data.checkOut);
+        if (checkOutDate <= checkInDate) {
+            validator.showErrors({ checkOut: 'Check-out must be after check-in' });
+            return;
+        }
+
+        // Get room details
+        const allRooms = [
+            { number: '101', type: 'Standard', rate: 60 },
+            { number: '102', type: 'Standard', rate: 60 },
+            { number: '201', type: 'Deluxe', rate: 80 },
+            { number: '202', type: 'Deluxe', rate: 80 },
+            { number: '301', type: 'Suite', rate: 100 },
+            { number: '302', type: 'Suite', rate: 100 }
+        ];
+        const room = allRooms.find(r => r.number === data.roomNumber);
+
+        // Create booking
+        const booking = {
+            roomNumber: data.roomNumber,
+            roomType: room.type,
+            rate: room.rate,
+            guestName: data.guestName,
+            phone: data.phone,
+            idNumber: data.idNumber,
+            travelReason: data.travelReason,
+            checkIn: data.checkIn,
+            checkOut: data.checkOut,
+            roomService: 0,
+            extraFees: 0,
+            comments: '',
+            status: 'Occupied',
+            createdAt: new Date().toISOString(),
+            createdBy: this.userData.username
+        };
+
+        // Save to localStorage (will be API call)
+        const bookings = JSON.parse(localStorage.getItem('roomBookings')) || [];
+        bookings.push(booking);
+        localStorage.setItem('roomBookings', JSON.stringify(bookings));
+
+        Modal.close();
+        Utils.showNotification('Guest registered successfully!', 'success');
+        this.loadData(); // Reload all data
     }
 
     addExtraFees(roomNumber) {
-        Modal.alert('Add Fees', `Add extra fees for room ${roomNumber}`, 'info');
+        const bookings = JSON.parse(localStorage.getItem('roomBookings')) || [];
+        const booking = bookings.find(b => b.roomNumber === roomNumber);
+        if (!booking) return;
+
+        const modalContent = `
+            <form id="extraFeesForm">
+                <div class="alert alert-info">
+                    <strong>Guest:</strong> ${booking.guestName}<br>
+                    <strong>Room:</strong> ${roomNumber} - ${booking.roomType}
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        ${Components.formGroup('Room Service Fees ($)', Components.numberInput('roomService', 'Enter amount', false, booking.roomService || 0))}
+                    </div>
+                    <div class="col-md-6">
+                        ${Components.formGroup('Extra Fees ($)', Components.numberInput('extraFees', 'Enter amount', false, booking.extraFees || 0))}
+                    </div>
+                </div>
+                
+                ${Components.formGroup('Comments/Notes', Components.textarea('comments', 'Add notes about the charges', false, booking.comments || ''))}
+            </form>
+        `;
+
+        Modal.show('Add Room Service & Extra Fees', modalContent, [
+            { label: 'Cancel', class: 'btn-secondary', onClick: () => Modal.close() },
+            { label: 'Save Fees', class: 'btn-primary', onClick: () => this.saveExtraFees(roomNumber) }
+        ]);
+    }
+
+    saveExtraFees(roomNumber) {
+        const form = document.getElementById('extraFeesForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        const bookings = JSON.parse(localStorage.getItem('roomBookings')) || [];
+        const bookingIndex = bookings.findIndex(b => b.roomNumber === roomNumber);
+        
+        if (bookingIndex === -1) return;
+
+        bookings[bookingIndex].roomService = parseFloat(data.roomService) || 0;
+        bookings[bookingIndex].extraFees = parseFloat(data.extraFees) || 0;
+        bookings[bookingIndex].comments = data.comments || '';
+
+        localStorage.setItem('roomBookings', JSON.stringify(bookings));
+
+        Modal.close();
+        Utils.showNotification('Fees added successfully!', 'success');
+        this.loadData();
     }
 
     viewBooking(roomNumber) {
@@ -385,27 +563,105 @@ class EmployeeDashboard {
 
         const nights = Utils.calculateDays(booking.checkIn, booking.checkOut);
         const roomCharges = nights * booking.rate;
-        const additionalCharges = (booking.roomService || 0) + (booking.extraFees || 0);
-        const total = roomCharges + additionalCharges;
+        const roomService = booking.roomService || 0;
+        const extraFees = booking.extraFees || 0;
+        const total = roomCharges + roomService + extraFees;
 
-        Modal.alert(
-            `Booking Details - Room ${roomNumber}`,
-            `<div style="text-align: left;">
-                <strong>Guest:</strong> ${booking.guestName}<br>
-                <strong>Phone:</strong> ${booking.phone}<br>
-                <strong>Check-In:</strong> ${Utils.formatDate(booking.checkIn)}<br>
-                <strong>Check-Out:</strong> ${Utils.formatDate(booking.checkOut)}<br>
-                <strong>Nights:</strong> ${nights}<br><br>
-                <strong>Room Charges:</strong> ${Utils.formatCurrency(roomCharges)}<br>
-                <strong>Additional:</strong> ${Utils.formatCurrency(additionalCharges)}<br>
-                <strong>Total:</strong> ${Utils.formatCurrency(total)}
-            </div>`,
-            'info'
-        );
+        const modalContent = `
+            <div style="text-align: left;">
+                <h5 class="border-bottom pb-2 mb-3">Guest Information</h5>
+                <div class="row mb-3">
+                    <div class="col-6"><strong>Guest Name:</strong></div>
+                    <div class="col-6">${booking.guestName}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6"><strong>Phone:</strong></div>
+                    <div class="col-6">${booking.phone}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6"><strong>ID Number:</strong></div>
+                    <div class="col-6">${booking.idNumber}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6"><strong>Travel Reason:</strong></div>
+                    <div class="col-6">${booking.travelReason}</div>
+                </div>
+
+                <h5 class="border-bottom pb-2 mb-3 mt-4">Booking Details</h5>
+                <div class="row mb-3">
+                    <div class="col-6"><strong>Room:</strong></div>
+                    <div class="col-6">${booking.roomNumber} - ${booking.roomType}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6"><strong>Check-In:</strong></div>
+                    <div class="col-6">${Utils.formatDate(booking.checkIn)}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6"><strong>Check-Out:</strong></div>
+                    <div class="col-6">${Utils.formatDate(booking.checkOut)}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6"><strong>Nights:</strong></div>
+                    <div class="col-6">${nights}</div>
+                </div>
+
+                <h5 class="border-bottom pb-2 mb-3 mt-4">Charges</h5>
+                <div class="row mb-2">
+                    <div class="col-6">Room Charges (${nights} nights × $${booking.rate}):</div>
+                    <div class="col-6 text-end">${Utils.formatCurrency(roomCharges)}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">Room Service:</div>
+                    <div class="col-6 text-end">${Utils.formatCurrency(roomService)}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">Extra Fees:</div>
+                    <div class="col-6 text-end">${Utils.formatCurrency(extraFees)}</div>
+                </div>
+                <div class="row mt-3 pt-3 border-top">
+                    <div class="col-6"><strong>Total Amount:</strong></div>
+                    <div class="col-6 text-end"><strong style="font-size: 1.2em; color: #28a745;">${Utils.formatCurrency(total)}</strong></div>
+                </div>
+                
+                ${booking.comments ? `
+                    <h5 class="border-bottom pb-2 mb-3 mt-4">Comments</h5>
+                    <p>${booking.comments}</p>
+                ` : ''}
+            </div>
+        `;
+
+        Modal.show(`Booking Details - Room ${roomNumber}`, modalContent, [
+            { label: 'Close', class: 'btn-secondary', onClick: () => Modal.close() }
+        ], 'large');
     }
 
     checkoutGuest(roomNumber) {
-        Modal.alert('Checkout', `Checkout guest from room ${roomNumber}`, 'info');
+        const bookings = JSON.parse(localStorage.getItem('roomBookings')) || [];
+        const booking = bookings.find(b => b.roomNumber === roomNumber);
+        if (!booking) return;
+
+        const nights = Utils.calculateDays(booking.checkIn, booking.checkOut);
+        const roomCharges = nights * booking.rate;
+        const total = roomCharges + (booking.roomService || 0) + (booking.extraFees || 0);
+
+        Modal.confirm(
+            'Checkout Guest',
+            `<div style="text-align: left;">
+                <p><strong>Guest:</strong> ${booking.guestName}</p>
+                <p><strong>Room:</strong> ${roomNumber} - ${booking.roomType}</p>
+                <p><strong>Total Bill:</strong> <span style="font-size: 1.3em; color: #28a745;">${Utils.formatCurrency(total)}</span></p>
+                <hr>
+                <p class="text-center">Are you sure you want to checkout this guest?</p>
+            </div>`,
+            () => {
+                // Remove booking
+                const updatedBookings = bookings.filter(b => b.roomNumber !== roomNumber);
+                localStorage.setItem('roomBookings', JSON.stringify(updatedBookings));
+
+                Utils.showNotification(`Guest checked out. Total bill: ${Utils.formatCurrency(total)}`, 'success');
+                this.loadData();
+            }
+        );
     }
 
     openSaleModal() {
