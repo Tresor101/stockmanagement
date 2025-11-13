@@ -1,10 +1,10 @@
 # Hotel Stock Management System
 
-A comprehensive web-based stock management system for hotels with role-based dashboards for Super Admin, Admin, and three types of employees (Bar, Warehouse, and Hotel Room departments).
+A comprehensive web-based stock management system for hotels with role-based dashboards, unified employee interface, and MySQL backend integration support.
 
 ## 🏨 Overview
 
-This system provides a complete solution for managing hotel inventory across multiple departments with different access levels and functionalities for each user role.
+This system provides a complete solution for managing hotel operations including room bookings, bar sales, and stock inventory with different access levels and functionalities for each user role.
 
 ## ✨ Features
 
@@ -13,72 +13,93 @@ This system provides a complete solution for managing hotel inventory across mul
 - Session management with automatic timeout (30 minutes)
 - Beautiful login page with cover image background
 - Password-protected access for all users
+- 6 distinct user roles with hierarchical permissions
 
 ### 👥 User Roles & Access Levels
 
 #### 1. **Super Admin** 🛡️
 - Complete system access and control
-- User management (create, edit, delete users)
+- User management (create, edit, delete all users)
 - All inventory management across departments
 - System-wide analytics and reports
 - Department management
 - Low stock alerts monitoring
-- Stock transfer approvals
+- Audit logs and system monitoring
 - System settings configuration
 
 #### 2. **Admin** 👔
-- Inventory management for all departments
-- Employee oversight and management
-- Stock request approval/rejection
-- Department reports and analytics
-- Low stock alert notifications
-- Stock transfer management
+- View comprehensive reports (bookings, sales, inventory, employees)
+- Access audit logs for all system activities
+- Monitor system performance and usage
+- Export reports and analytics
+- No direct management functions (oversight role)
 
-#### 3. **Employee - Bar** 🍸
-- View Bar department inventory
-- Update stock quantities
-- Request stock items
-- Track daily usage
-- Low stock alerts for bar items
+#### 3. **Management** 👨‍💼
+- Employee management (create, edit users)
+- Request approval/rejection (stock requests, price changes)
+- Inventory oversight across all departments
+- Department reports access
+- Price change approvals
 
-#### 4. **Employee - Warehouse** 📦
-- View Warehouse inventory
+#### 4. **Receptionist** 🛎️
+- Room booking management
+- Check-in/Check-out operations
+- Guest registration
+- Room availability tracking
+- Booking history and reports
+- Submit requests to Management
+
+#### 5. **Stock Person** 📦
+- Inventory management (kitchen, bar, housekeeping)
+- Stock level monitoring
 - Receive shipments
-- Transfer stock to other departments
-- Update warehouse quantities
-- Monitor storage levels
+- Stock transfer between departments
+- Low stock alerts
+- Submit stock requests to Management
 
-#### 5. **Employee - Hotel Room** 🛏️
-- View Hotel Room supplies inventory
-- Track linens, toiletries, and amenities
-- Request additional supplies
-- Room preparation checklists
-- Update supply usage
+#### 6. **Bartender** 🍸
+- Bar sales management
+- Create and manage sales transactions
+- View bar inventory
+- Track daily sales
+- Sales reports
+- Submit requests to Management
 
 ## 📁 Project Structure
 
 ```
 stockmanagement/
 │
-├── index.html                          # Login page with cover.jpg background
+├── index.html                          # Login page
 ├── superadmin-dashboard.html           # Super Admin dashboard
-├── admin-dashboard.html                # Admin dashboard
-├── employee-bar-dashboard.html         # Bar employee dashboard
-├── employee-warehouse-dashboard.html   # Warehouse employee dashboard
-├── employee-hotel-dashboard.html       # Hotel Room employee dashboard
+├── admin-dashboard.html                # Admin dashboard (reports & audit)
+├── management-dashboard.html           # Management dashboard (coming soon)
+├── employee-dashboard.html             # Unified employee dashboard (all 3 roles)
+├── receptionist-dashboard.html         # (Legacy - redirects to employee-dashboard)
+├── stockperson-dashboard.html          # (Legacy - redirects to employee-dashboard)
+├── bartender-dashboard.html            # (Legacy - redirects to employee-dashboard)
 │
 ├── css/
 │   ├── login.css                       # Login page styles
 │   └── dashboard.css                   # Dashboard styles (all roles)
 │
-├── Js/
+├── js/
 │   ├── auth.js                         # Authentication & session management
+│   ├── api.js                          # Unified API layer (ready for MySQL)
+│   ├── components.js                   # Reusable UI components library
+│   ├── employee-unified.js             # Unified employee dashboard controller
 │   ├── superadmin.js                   # Super Admin functionality
 │   ├── admin.js                        # Admin functionality
-│   └── employee.js                     # Employee functionality (all types)
+│   ├── hotel-rooms.js                  # Room booking management
+│   ├── bar-sales.js                    # Bar sales management
+│   └── bar-inventory.js                # Bar inventory management
 │
 ├── cover.jpg                           # Login page background image
-└── README.md                           # This file
+├── README.md                           # This file
+├── QUICK_START.md                      # Quick start guide
+├── FEATURES.md                         # Feature documentation
+├── BACKEND_INTEGRATION_GUIDE.md        # MySQL integration guide
+└── CODE_SIMPLIFICATION_SUMMARY.md      # Code refactoring summary
 ```
 
 ## 🚀 Getting Started
@@ -122,46 +143,25 @@ stockmanagement/
 - **Password:** manager123
 - **Role:** Admin
 
-OR
-
+### Management
 - **Username:** supervisor
 - **Password:** super123
-- **Role:** Admin
+- **Role:** Management
 
-### Employees
+### Receptionist
+- **Username:** reception
+- **Password:** recep123
+- **Role:** Receptionist
 
-**Bar Department:**
-- **Username:** staff
-- **Password:** staff123
-- **Role:** Employee - Bar
-
-OR
-
-- **Username:** bartender
-- **Password:** bar123
-- **Role:** Employee - Bar
-
-**Warehouse Department:**
-- **Username:** warehouse
-- **Password:** ware123
-- **Role:** Employee - Warehouse
-
-OR
-
+### Stock Person
 - **Username:** stock
 - **Password:** stock123
-- **Role:** Employee - Warehouse
+- **Role:** Stock Person
 
-**Hotel Room Department:**
-- **Username:** room
-- **Password:** room123
-- **Role:** Employee - Hotel Room
-
-OR
-
-- **Username:** housekeeping
-- **Password:** house123
-- **Role:** Employee - Hotel Room
+### Bartender
+- **Username:** bartender
+- **Password:** bar123
+- **Role:** Bartender
 
 ## 📊 Features by Dashboard
 
@@ -173,27 +173,33 @@ OR
 - ✅ Department management
 - ✅ Comprehensive reports and analytics
 - ✅ Low stock alerts
-- ✅ Stock transfer monitoring
-- ✅ System settings
+- ✅ System-wide monitoring
 - ✅ Recent activity log
 
 ### Admin Dashboard
-- ✅ Department overview statistics
-- ✅ Inventory management
-- ✅ Employee monitoring
-- ✅ Stock request approvals
-- ✅ Reports generation
-- ✅ Alert notifications
+- ✅ Comprehensive reports (bookings, sales, inventory, employees)
+- ✅ Audit logs and activity tracking
+- ✅ System performance monitoring
+- ✅ Export functionality
+- ✅ Data analytics and insights
 
-### Employee Dashboards
-- ✅ Department-specific inventory view
-- ✅ Stock quantity updates
-- ✅ Request stock items
-- ✅ Low stock alerts
+### Management Dashboard
+- ✅ Employee management (create, edit users)
+- ✅ Request approval system (stock, price changes)
+- ✅ Inventory oversight (all departments)
+- ✅ Department reports access
+- ✅ Price change approvals
+
+### Employee Dashboard (Unified)
+- ✅ Role-based content (Receptionist, Stock Person, Bartender)
+- ✅ Dynamic navigation based on role
 - ✅ Department-specific features:
-  - **Bar:** Daily usage tracking
-  - **Warehouse:** Shipment receiving, Stock transfers
-  - **Hotel Room:** Room checklists, Supply tracking
+  - **Receptionist:** Room bookings, check-in/check-out, guest management
+  - **Stock Person:** Inventory management, stock transfers, low stock alerts
+  - **Bartender:** Sales management, bar inventory, sales reports
+- ✅ Request submission system
+- ✅ Real-time statistics
+- ✅ Responsive design
 
 ## 🎨 Design Features
 

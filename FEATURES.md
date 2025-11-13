@@ -2,6 +2,26 @@
 
 ## Latest Updates (November 2025)
 
+### 🚀 Code Simplification & Refactoring
+
+#### Unified Employee Dashboard
+- **Before:** 3 separate dashboard files (bar, warehouse, hotel)
+- **After:** Single `employee-dashboard.html` with role-based sections
+- **Result:** 66% code reduction
+
+#### Unified API Layer (`js/api.js`)
+- Centralized backend communication
+- Ready for MySQL/Hostinger integration
+- LocalStorage fallback for development
+- All 40+ API endpoints pre-configured
+- Automatic authentication token management
+
+#### Reusable Components Library (`js/components.js`)
+- 20+ reusable UI components
+- Stat cards, modals, forms, validation
+- Consistent design across all dashboards
+- 92% reduction in duplicate HTML
+
 ### 🎨 Responsive Design
 The entire system is now fully responsive across all devices:
 
@@ -114,12 +134,13 @@ The entire system is now fully responsive across all devices:
 - **Add/Edit/Delete**: Full CRUD operations
 
 ### User Management
-- **5 User Roles**:
-  1. Super Admin - Full system access
-  2. Admin - Inventory and employee management
-  3. Employee-Bar - Bar inventory access
-  4. Employee-Warehouse - Warehouse inventory access
-  5. Employee-Hotel - Hotel room supplies access
+- **6 User Roles**:
+  1. Super Admin - Full system access and control
+  2. Admin - Reports and audit logs only (oversight role)
+  3. Management - Employee management, request approvals, inventory oversight
+  4. Receptionist - Room booking management, check-in/check-out
+  5. Stock Person - Inventory management, stock transfers
+  6. Bartender - Bar sales management, bar inventory
 
 ### Security Features
 - Session-based authentication
@@ -148,22 +169,27 @@ The entire system is now fully responsive across all devices:
 ### Admin
 - Username: `manager`
 - Password: `manager123`
-- Access: Inventory and employee management
+- Access: Reports and audit logs
 
-### Employee - Bar
-- Username: `staff`
-- Password: `staff123`
-- Access: Bar inventory only
+### Management
+- Username: `supervisor`
+- Password: `super123`
+- Access: Employee management, approvals, inventory oversight
 
-### Employee - Warehouse
-- Username: `warehouse`
-- Password: `warehouse123`
-- Access: Warehouse inventory only
+### Receptionist
+- Username: `reception`
+- Password: `recep123`
+- Access: Room bookings, check-in/check-out
 
-### Employee - Hotel Room
-- Username: `room`
-- Password: `room123`
-- Access: Hotel room supplies only
+### Stock Person
+- Username: `stock`
+- Password: `stock123`
+- Access: Inventory management, stock transfers
+
+### Bartender
+- Username: `bartender`
+- Password: `bar123`
+- Access: Bar sales and inventory
 
 ---
 
@@ -171,6 +197,8 @@ The entire system is now fully responsive across all devices:
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Framework**: Bootstrap 5.1.3
+- **Architecture**: Component-based with unified API layer
+- **Backend Ready**: MySQL integration support (Hostinger)
 - **Charts**: Chart.js
 - **Icons**: Font Awesome
 - **Storage**: Session Storage, Local Storage

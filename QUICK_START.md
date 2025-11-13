@@ -34,27 +34,32 @@ Then open the URL shown in terminal
 **Super Admin Access:**
 - Username: `admin`
 - Password: `admin123`
-- Role: Select "Super Admin"
+- Role: Super Admin
 
 **Admin Access:**
 - Username: `manager`
 - Password: `manager123`
-- Role: Select "Admin"
+- Role: Admin
 
-**Bar Employee:**
-- Username: `staff`
-- Password: `staff123`
-- Role: Select "Employee - Bar"
+**Management Access:**
+- Username: `supervisor`
+- Password: `super123`
+- Role: Management
 
-**Warehouse Employee:**
-- Username: `warehouse`
-- Password: `ware123`
-- Role: Select "Employee - Warehouse"
+**Receptionist:**
+- Username: `reception`
+- Password: `recep123`
+- Role: Receptionist
 
-**Hotel Room Employee:**
-- Username: `room`
-- Password: `room123`
-- Role: Select "Employee - Hotel Room"
+**Stock Person:**
+- Username: `stock`
+- Password: `stock123`
+- Role: Stock Person
+
+**Bartender:**
+- Username: `bartender`
+- Password: `bar123`
+- Role: Bartender
 
 ## 📋 What to Test
 
@@ -64,7 +69,7 @@ Then open the URL shown in terminal
 - ✅ Role-based redirection
 
 ### 2. Super Admin Dashboard
-- ✅ View all 4 stat cards
+- ✅ View all stat cards
 - ✅ Check inventory table with filters
 - ✅ View user management
 - ✅ Check charts
@@ -72,15 +77,23 @@ Then open the URL shown in terminal
 - ✅ Activity log
 
 ### 3. Admin Dashboard
-- ✅ Department overview
-- ✅ Quick actions
-- ✅ Inventory management
-- ✅ Charts
+- ✅ Comprehensive reports (bookings, sales, inventory, employees)
+- ✅ Audit logs
+- ✅ System monitoring
+- ✅ Export functionality
 
-### 4. Employee Dashboards
-- ✅ Bar: Check beverages inventory
-- ✅ Warehouse: Check food items
-- ✅ Hotel Room: Check linens and supplies
+### 4. Management Dashboard (Coming Soon)
+- ✅ Employee management
+- ✅ Request approvals
+- ✅ Inventory oversight
+- ✅ Department reports
+
+### 5. Employee Dashboard (Unified)
+- ✅ **Receptionist:** Room bookings, check-in/check-out, guest management
+- ✅ **Stock Person:** Inventory management, stock transfers, low stock alerts
+- ✅ **Bartender:** Sales management, bar inventory, sales reports
+- ✅ Role-based navigation and content
+- ✅ Request submission system
 
 ## 🎯 Key Features to Explore
 
