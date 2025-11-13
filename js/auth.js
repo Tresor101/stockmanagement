@@ -99,9 +99,10 @@ function redirectToDashboard(role) {
         'superadmin': 'superadmin-dashboard.html',
         'admin': 'admin-dashboard.html',
         'management': 'management-dashboard.html',
-        'receptionist': 'receptionist-dashboard.html',
-        'stockperson': 'stockperson-dashboard.html',
-        'bartender': 'bartender-dashboard.html'
+        // All employee roles use unified dashboard
+        'receptionist': 'employee-dashboard.html',
+        'stockperson': 'employee-dashboard.html',
+        'bartender': 'employee-dashboard.html'
     };
     
     window.location.href = dashboardMap[role];
