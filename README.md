@@ -9,6 +9,7 @@ This system provides a complete solution for managing hotel operations including
 ## ✨ Features
 
 ### 🔐 Authentication System
+
 - Secure login with role-based access control
 - Session management with automatic timeout (30 minutes)
 - Beautiful login page with cover image background
@@ -18,6 +19,7 @@ This system provides a complete solution for managing hotel operations including
 ### 👥 User Roles & Access Levels
 
 #### 1. **Super Admin** 🛡️
+
 - Complete system access and control
 - User management (create, edit, delete all users)
 - All inventory management across departments
@@ -28,6 +30,7 @@ This system provides a complete solution for managing hotel operations including
 - System settings configuration
 
 #### 2. **Admin** 👔
+
 - View comprehensive reports (bookings, sales, inventory, employees)
 - Access audit logs for all system activities
 - Monitor system performance and usage
@@ -35,6 +38,7 @@ This system provides a complete solution for managing hotel operations including
 - No direct management functions (oversight role)
 
 #### 3. **Management** 👨‍💼
+
 - Employee management (create, edit users)
 - Request approval/rejection (stock requests, price changes)
 - Inventory oversight across all departments
@@ -42,6 +46,7 @@ This system provides a complete solution for managing hotel operations including
 - Price change approvals
 
 #### 4. **Receptionist** 🛎️
+
 - Room booking management
 - Check-in/Check-out operations
 - Guest registration
@@ -50,6 +55,7 @@ This system provides a complete solution for managing hotel operations including
 - Submit requests to Management
 
 #### 5. **Stock Person** 📦
+
 - Inventory management (kitchen, bar, housekeeping)
 - Stock level monitoring
 - Receive shipments
@@ -58,6 +64,7 @@ This system provides a complete solution for managing hotel operations including
 - Submit stock requests to Management
 
 #### 6. **Bartender** 🍸
+
 - Bar sales management
 - Create and manage sales transactions
 - View bar inventory
@@ -67,7 +74,7 @@ This system provides a complete solution for managing hotel operations including
 
 ## 📁 Project Structure
 
-```
+```text
 stockmanagement/
 │
 ├── index.html                          # Login page
@@ -105,20 +112,24 @@ stockmanagement/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Modern web browser (Chrome, Firefox, Edge, Safari)
 - No server required - runs entirely in the browser
 
 ### Installation
 
 1. **Clone or Download the Repository**
+
    ```bash
    git clone https://github.com/Tresor101/stockmanagement.git
    cd stockmanagement
    ```
 
 2. **Open in Browser**
+
    - Simply open `index.html` in your web browser
    - Or use a local development server:
+
    ```bash
    # Using Python
    python -m http.server 8000
@@ -134,31 +145,37 @@ stockmanagement/
 ## 🔑 Demo Credentials
 
 ### Super Admin
+
 - **Username:** admin
 - **Password:** admin123
 - **Role:** Super Admin
 
 ### Admin
+
 - **Username:** manager
 - **Password:** manager123
 - **Role:** Admin
 
 ### Management
+
 - **Username:** supervisor
 - **Password:** super123
 - **Role:** Management
 
 ### Receptionist
+
 - **Username:** reception
 - **Password:** recep123
 - **Role:** Receptionist
 
 ### Stock Person
+
 - **Username:** stock
 - **Password:** stock123
 - **Role:** Stock Person
 
 ### Bartender
+
 - **Username:** bartender
 - **Password:** bar123
 - **Role:** Bartender
@@ -166,6 +183,7 @@ stockmanagement/
 ## 📊 Features by Dashboard
 
 ### Super Admin Dashboard
+
 - ✅ Real-time statistics (Total items, Users, Low stock, Departments)
 - ✅ Interactive charts (Stock levels, Distribution)
 - ✅ Complete inventory table with search and filters
@@ -177,6 +195,7 @@ stockmanagement/
 - ✅ Recent activity log
 
 ### Admin Dashboard
+
 - ✅ Comprehensive reports (bookings, sales, inventory, employees)
 - ✅ Audit logs and activity tracking
 - ✅ System performance monitoring
@@ -184,6 +203,7 @@ stockmanagement/
 - ✅ Data analytics and insights
 
 ### Management Dashboard
+
 - ✅ Employee management (create, edit users)
 - ✅ Request approval system (stock, price changes)
 - ✅ Inventory oversight (all departments)
@@ -191,6 +211,7 @@ stockmanagement/
 - ✅ Price change approvals
 
 ### Employee Dashboard (Unified)
+
 - ✅ Role-based content (Receptionist, Stock Person, Bartender)
 - ✅ Dynamic navigation based on role
 - ✅ Department-specific features:
@@ -242,18 +263,21 @@ stockmanagement/
 The system comes pre-loaded with sample data:
 
 **Bar Department:**
+
 - Whiskey - Johnny Walker (45 bottles)
 - Red Wine - Merlot (32 bottles)
 - Beer - Heineken (120 bottles)
 - Coca Cola (8 crates) - LOW STOCK
 
 **Warehouse:**
+
 - Rice - Basmati (250 kg)
 - Cooking Oil (45 liters)
 - Coffee Beans (12 kg) - LOW STOCK
 - Cleaning Detergent (28 bottles)
 
 **Hotel Room:**
+
 - Bed Linens - Queen (45 sets)
 - Towels - Bath (78 pieces)
 - Shampoo - Guest Size (15 boxes) - LOW STOCK
@@ -276,12 +300,14 @@ This project is open source and available for educational and commercial use.
 
 ## 👨‍💻 Developer
 
-**Tresor Kalembo Tshibangu**
+### Tresor Kalembo Tshibangu
+
 - GitHub: [@Tresor101](https://github.com/Tresor101)
 
 ## 📞 Support
 
 For issues or questions:
+
 1. Check existing documentation
 2. Review the code comments
 3. Contact the developer

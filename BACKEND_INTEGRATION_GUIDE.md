@@ -1,4 +1,5 @@
 # Backend Integration Guide for Hotel Stock Management System
+
 ## MySQL Database Structure & API Endpoints
 
 **Date:** November 13, 2025  
@@ -9,7 +10,9 @@
 ## ✅ COMPLETED CHANGES
 
 ### 1. Role Restructuring
+
 **Old System:**
+
 - superadmin
 - admin
 - employee-bar
@@ -17,7 +20,8 @@
 - employee-hotel
 
 **New System (✅ Implemented):**
-```
+
+```text
 Super Admin → Admin (Reports/Audit) → Management → Employees
                                           ├── Receptionist
                                           ├── Stock Person
@@ -25,6 +29,7 @@ Super Admin → Admin (Reports/Audit) → Management → Employees
 ```
 
 ### 2. Dashboard Files Renamed
+
 - ✅ `employee-hotel-dashboard.html` → `receptionist-dashboard.html`
 - ✅ `employee-warehouse-dashboard.html` → `stockperson-dashboard.html`
 - ✅ `employee-bar-dashboard.html` → `bartender-dashboard.html`
